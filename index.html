@@ -60,32 +60,28 @@
         renderer="colorManagement: true; physicallyCorrectLights: true;"
         light="defaultLightsEnabled: true">
 
-        <!-- LUZ AMBIENTAL MUY BRILLANTE -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
+        <!-- LUZ AMBIENTAL BRILLANTE -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.8"></a-entity>
         
-        <!-- LUZ DIRECCIONAL PRINCIPAL - MÁS FUERTE -->
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 2.5" 
-                  position="2 8 3"></a-entity>
+        <!-- LUZ DIRECCIONAL PRINCIPAL -->
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 2.0" 
+                  position="2 5 3"></a-entity>
         
         <!-- LUZ ADICIONAL DESDE ARRIBA -->
-        <a-entity light="type: point; color: #FFFFFF; intensity: 1.8" 
-                  position="0 6 0"></a-entity>
-
-        <!-- LUZ DESDE EL FRENTE -->
-        <a-entity light="type: spot; color: #FFFFFF; intensity: 1.5; angle: 60" 
-                  position="0 4 5" rotation="-30 0 0"></a-entity>
+        <a-entity light="type: point; color: #FFFFFF; intensity: 1.2" 
+                  position="0 5 0"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Tu alfil 3D - 29 CM DE ALTURA APROX -->
+            <!-- Tu alfil 3D - ROTACIÓN CORREGIDA -->
             <a-entity 
                 gltf-model="alfil.glb"
-                scale="0.35 0.35 0.35"  <!-- MUCHO MÁS GRANDE - ~29cm -->
-                position="0 0.8 0"      <!-- MÁS ALTO PARA QUE NO SE VE CORTADO -->
-                rotation="0 180 0"
-                animation="property: rotation; to: 0 540 0; loop: true; dur: 10000">
+                scale="0.15 0.15 0.15"  <!-- 15 cm aprox -->
+                position="0 0.15 0"     <!-- Levantado un poco -->
+                rotation="180 0 0"      <!-- ROTACIÓN CORREGIDA - 180 grados en X -->
+                animation="property: rotation; to: 180 360 0; loop: true; dur: 15000">
             </a-entity>
         </a-marker>
 
@@ -97,7 +93,7 @@
         const instructions = document.querySelector('.instructions');
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Marcador detectado!</h3><p>Alfil de ~29cm - Mueve para ver ángulos</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Alfil de 15cm - Orientación correcta</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
@@ -106,7 +102,8 @@
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🚀 AR.js - Alfil de 29cm con iluminación máxima');
+        console.log('🚀 AR.js - Alfil con rotación corregida');
     </script>
 </body>
 </html>
+
