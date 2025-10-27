@@ -26,19 +26,23 @@
         }
         .marker-image {
             position: fixed;
-            bottom: 20px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             background: white;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 8px;
+            border-radius: 8px;
             text-align: center;
             z-index: 1000;
         }
         .marker-image img {
-            width: 100px;
-            height: 100px;
-            border: 2px solid #4285f4;
+            width: 60px;    <!-- MÁS PEQUEÑO -->
+            height: 60px;   <!-- MÁS PEQUEÑO -->
+            border: 1px solid #4285f4;
+        }
+        .marker-image p {
+            margin: 5px 0;
+            font-size: 12px; <!-- TEXTO MÁS PEQUEÑO -->
         }
     </style>
 </head>
@@ -66,22 +70,18 @@
         <!-- LUZ DIRECCIONAL PRINCIPAL -->
         <a-entity light="type: directional; color: #FFFFFF; intensity: 2.0" 
                   position="2 5 3"></a-entity>
-        
-        <!-- LUZ ADICIONAL DESDE ARRIBA -->
-        <a-entity light="type: point; color: #FFFFFF; intensity: 1.2" 
-                  position="0 5 0"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Tu alfil 3D - ROTACIÓN CORREGIDA -->
+            <!-- Tu alfil 3D - ROTACIÓN CORREGIDA Y QUE ROTE -->
             <a-entity 
                 gltf-model="alfil.glb"
                 scale="0.15 0.15 0.15"  <!-- 15 cm aprox -->
                 position="0 0.15 0"     <!-- Levantado un poco -->
-                rotation="0 180 0"    <!-- Gira 180 grados en Y -->
-                animation="property: rotation; to: 180 360 0; loop: true; dur: 15000">
+                rotation="0 0 0"        <!-- EMPEZAMOS CON CERO -->
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
             </a-entity>
         </a-marker>
 
@@ -92,17 +92,44 @@
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
         
+        // Probar diferentes rotaciones hasta encontrar la correcta
+        let currentRotation = 0;
+        const alfil = document.querySelector('[gltf-model]');
+        
+        function rotateAlfil() {
+            const rotations = [
+                "0 0 0",      // Original
+                "180 0 0",    // Volteado vertical
+                "0 180 0",    // Volteado horizontal  
+                "0 0 180",    // Volteado en Z
+                "90 0 0",     // Inclinado 90°
+                "270 0 0",    // Inclinado 270°
+                "0 90 0",     // De lado
+                "0 270 0"     // De lado opuesto
+            ];
+            
+            currentRotation = (currentRotation + 1) % rotations.length;
+            alfil.setAttribute('rotation', rotations[currentRotation]);
+            
+            instructions.innerHTML = `<h3>♟️ Probando rotación ${currentRotation + 1}</h3><p>¿Se ve derecho el alfil?</p>`;
+        }
+        
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Alfil de 15cm - Orientación correcta</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Si no se ve derecho, toca aquí →</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
+            instructions.style.cursor = 'pointer';
+            
+            // Al tocar las instrucciones, cambia la rotación
+            instructions.onclick = rotateAlfil;
         });
         
         marker.addEventListener('markerLost', () => {
             instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
+            instructions.style.cursor = 'default';
         });
 
-        console.log('🚀 AR.js - Alfil con rotación corregida');
+        console.log('🚀 AR.js - Marcador pequeño y rotación ajustable');
     </script>
 </body>
 </html>
