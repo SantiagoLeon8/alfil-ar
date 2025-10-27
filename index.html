@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+        }
+        .instructions {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+        }
+        .marker-image {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+        .marker-image img {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #4285f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
+        <p>Permite el acceso a la cámara y apunta al marcador</p>
+    </div>
+
+    <div class="marker-image">
+        <p>Usa este marcador:</p>
+        <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" alt="Marcador AR">
+    </div>
+
+    <a-scene 
+        vr-mode-ui="enabled: false"
+        embedded
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
+        renderer="colorManagement: true; physicallyCorrectLights: true;"
+        light="defaultLightsEnabled: true">
+
+        <!-- LUZ AMBIENTAL MUY BRILLANTE -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
+        
+        <!-- LUZ DIRECCIONAL PRINCIPAL - MÁS FUERTE -->
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 2.5" 
+                  position="2 8 3"></a-entity>
+        
+        <!-- LUZ ADICIONAL DESDE ARRIBA -->
+        <a-entity light="type: point; color: #FFFFFF; intensity: 1.8" 
+                  position="0 6 0"></a-entity>
+
+        <!-- LUZ DESDE EL FRENTE -->
+        <a-entity light="type: spot; color: #FFFFFF; intensity: 1.5; angle: 60" 
+                  position="0 4 5" rotation="-30 0 0"></a-entity>
+
+        <!-- Marcador Hiro -->
+        <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
+            url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
+            
+            <!-- Tu alfil 3D - 29 CM DE ALTURA APROX -->
+            <a-entity 
+                gltf-model="alfil.glb"
+                scale="0.35 0.35 0.35"  <!-- MUCHO MÁS GRANDE - ~29cm -->
+                position="0 0.8 0"      <!-- MÁS ALTO PARA QUE NO SE VE CORTADO -->
+                rotation="0 180 0"
+                animation="property: rotation; to: 0 540 0; loop: true; dur: 10000">
+            </a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+        const marker = document.getElementById('marker');
+        const instructions = document.querySelector('.instructions');
+        
+        marker.addEventListener('markerFound', () => {
+            instructions.innerHTML = '<h3>🎉 ¡Marcador detectado!</h3><p>Alfil de ~29cm - Mueve para ver ángulos</p>';
+            instructions.style.background = 'rgba(0,150,0,0.8)';
+        });
+        
+        marker.addEventListener('markerLost', () => {
+            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
+            instructions.style.background = 'rgba(0,0,0,0.8)';
+        });
+
+        console.log('🚀 AR.js - Alfil de 29cm con iluminación máxima');
+    </script>
+</body>
+</html>
