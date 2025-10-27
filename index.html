@@ -23,8 +23,6 @@
             z-index: 1000;
             width: 90%;
             max-width: 400px;
-            cursor: pointer;
-            border: 2px solid #4285f4;
         }
         .marker-image {
             position: fixed;
@@ -46,30 +44,12 @@
             margin: 3px 0;
             font-size: 10px;
         }
-        .rotation-info {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.9);
-            color: #333;
-            padding: 8px 12px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 1000;
-            font-size: 12px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-    <div class="instructions" id="instructions">
-        <h3>♟️ TOCA AQUÍ PARA CAMBIAR ROTACIÓN</h3>
-        <p>Presiona hasta que el alfil se vea derecho</p>
-    </div>
-
-    <div class="rotation-info" id="rotationInfo">
-        Rotación: 1/12 - Original
+    <div class="instructions">
+        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
+        <p>Alfil en posición correcta - Parte superior arriba</p>
     </div>
 
     <div class="marker-image">
@@ -95,14 +75,12 @@
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Tu alfil 3D - COMPLETAMENTE QUIETO -->
+            <!-- Tu alfil 3D - VOLTEADO 180 GRADOS -->
             <a-entity 
-                id="alfil"
                 gltf-model="alfil.glb"
                 scale="0.15 0.15 0.15"
                 position="0 0.15 0"
-                rotation="0 0 0">
-                <!-- SIN ANIMACIÓN - COMPLETAMENTE QUIETO -->
+                rotation="180 0 0">  <!-- 180 GRADOS - PARTE SUPERIOR ARRIBA -->
             </a-entity>
         </a-marker>
 
@@ -111,66 +89,20 @@
 
     <script>
         const marker = document.getElementById('marker');
-        const instructions = document.getElementById('instructions');
-        const rotationInfo = document.getElementById('rotationInfo');
-        const alfil = document.getElementById('alfil');
-        
-        // TODAS las rotaciones posibles
-        const rotations = [
-            { value: "0 0 0", name: "Original" },
-            { value: "180 0 0", name: "Volteado arriba/abajo" },
-            { value: "0 180 0", name: "Volteado izquierda/derecha" },
-            { value: "0 0 180", name: "Volteado frontal/trasero" },
-            { value: "90 0 0", name: "Acostado hacia atrás" },
-            { value: "270 0 0", name: "Acostado hacia adelante" },
-            { value: "0 90 0", name: "De lado derecho" },
-            { value: "0 270 0", name: "De lado izquierdo" },
-            { value: "180 180 0", name: "Combinación 1" },
-            { value: "180 0 180", name: "Combinación 2" },
-            { value: "0 180 180", name: "Combinación 3" },
-            { value: "180 180 180", name: "Combinación 4" }
-        ];
-        
-        let currentRotationIndex = 0;
-        
-        function applyRotation() {
-            const rotation = rotations[currentRotationIndex];
-            
-            // ELIMINAR CUALQUIER ANIMACIÓN EXISTENTE
-            alfil.removeAttribute('animation');
-            
-            // APLICAR SOLO LA ROTACIÓN FIJA
-            alfil.setAttribute('rotation', rotation.value);
-            
-            rotationInfo.textContent = `Rotación: ${currentRotationIndex + 1}/12 - ${rotation.name}`;
-            
-            // Cambiar color
-            const hue = (currentRotationIndex * 30) % 360;
-            instructions.style.background = `hsla(${hue}, 70%, 20%, 0.9)`;
-        }
-        
-        function nextRotation() {
-            currentRotationIndex = (currentRotationIndex + 1) % rotations.length;
-            applyRotation();
-        }
-        
-        // Al tocar las instrucciones, cambia la rotación
-        instructions.addEventListener('click', nextRotation);
+        const instructions = document.querySelector('.instructions');
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎯 TOCA AQUÍ PARA CAMBIAR ROTACIÓN</h3><p>Presiona hasta que el alfil se vea derecho ↑</p>';
-            instructions.style.border = '2px solid #34a853';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Parte superior arriba - Base abajo</p>';
+            instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ APUNTA AL MARCADOR</h3><p>Toca aquí para rotar cuando veas el alfil</p>';
-            instructions.style.border = '2px solid #4285f4';
+            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
+            instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        // Aplicar primera rotación
-        applyRotation();
-        
-        console.log('🚫 Alfil COMPLETAMENTE quieto - Sin animación');
+        console.log('✅ Alfil volteado 180° - Parte superior arriba');
     </script>
 </body>
 </html>
+
