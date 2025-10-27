@@ -60,20 +60,6 @@
             font-size: 12px;
             font-weight: bold;
         }
-        .success-message {
-            position: fixed;
-            top: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(52, 168, 83, 0.9);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 1000;
-            font-size: 14px;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -84,10 +70,6 @@
 
     <div class="rotation-info" id="rotationInfo">
         Rotación: 1/12 - Original
-    </div>
-
-    <div class="success-message" id="successMessage">
-        ✅ ¡Alfil correcto! Ya no gira automáticamente
     </div>
 
     <div class="marker-image">
@@ -113,14 +95,14 @@
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Tu alfil 3D - SIN ANIMACIÓN AUTOMÁTICA -->
+            <!-- Tu alfil 3D - COMPLETAMENTE QUIETO -->
             <a-entity 
                 id="alfil"
                 gltf-model="alfil.glb"
                 scale="0.15 0.15 0.15"
                 position="0 0.15 0"
                 rotation="0 0 0">
-                <!-- QUITAMOS LA ANIMACIÓN -->
+                <!-- SIN ANIMACIÓN - COMPLETAMENTE QUIETO -->
             </a-entity>
         </a-marker>
 
@@ -131,7 +113,6 @@
         const marker = document.getElementById('marker');
         const instructions = document.getElementById('instructions');
         const rotationInfo = document.getElementById('rotationInfo');
-        const successMessage = document.getElementById('successMessage');
         const alfil = document.getElementById('alfil');
         
         // TODAS las rotaciones posibles
@@ -151,60 +132,45 @@
         ];
         
         let currentRotationIndex = 0;
-        let rotationFound = false;
         
         function applyRotation() {
             const rotation = rotations[currentRotationIndex];
+            
+            // ELIMINAR CUALQUIER ANIMACIÓN EXISTENTE
+            alfil.removeAttribute('animation');
+            
+            // APLICAR SOLO LA ROTACIÓN FIJA
             alfil.setAttribute('rotation', rotation.value);
+            
             rotationInfo.textContent = `Rotación: ${currentRotationIndex + 1}/12 - ${rotation.name}`;
             
-            // Cambiar color según el número de intentos
+            // Cambiar color
             const hue = (currentRotationIndex * 30) % 360;
             instructions.style.background = `hsla(${hue}, 70%, 20%, 0.9)`;
         }
         
         function nextRotation() {
-            if (rotationFound) return; // No hacer nada si ya se encontró la rotación correcta
-            
             currentRotationIndex = (currentRotationIndex + 1) % rotations.length;
             applyRotation();
-            
-            // Preguntar si esta rotación es la correcta
-            if (confirm(`¿El alfil se ve CORRECTO en esta posición?\n\nRotación ${currentRotationIndex + 1}/12: ${rotations[currentRotationIndex].name}\n\n• Si es correcto, presiona "Aceptar"\n• Si no, presiona "Cancelar" para seguir probando`)) {
-                rotationFound = true;
-                instructions.innerHTML = '<h3>✅ ¡ROTACIÓN CORRECTA!</h3><p>El alfil ya no girará automáticamente</p>';
-                instructions.style.background = 'rgba(52, 168, 83, 0.9)';
-                instructions.style.border = '2px solid #34a853';
-                instructions.style.cursor = 'default';
-                rotationInfo.style.display = 'none';
-                successMessage.style.display = 'block';
-                
-                // Opcional: agregar rotación manual suave
-                alfil.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear');
-            }
         }
         
         // Al tocar las instrucciones, cambia la rotación
         instructions.addEventListener('click', nextRotation);
         
         marker.addEventListener('markerFound', () => {
-            if (!rotationFound) {
-                instructions.innerHTML = '<h3>🎯 TOCA AQUÍ PARA CAMBIAR ROTACIÓN</h3><p>Presiona hasta que el alfil se vea derecho ↑</p>';
-                instructions.style.border = '2px solid #4285f4';
-            }
+            instructions.innerHTML = '<h3>🎯 TOCA AQUÍ PARA CAMBIAR ROTACIÓN</h3><p>Presiona hasta que el alfil se vea derecho ↑</p>';
+            instructions.style.border = '2px solid #34a853';
         });
         
         marker.addEventListener('markerLost', () => {
-            if (!rotationFound) {
-                instructions.innerHTML = '<h3>♟️ APUNTA AL MARCADOR</h3><p>Toca aquí para rotar cuando veas el alfil</p>';
-                instructions.style.border = '2px solid #4285f4';
-            }
+            instructions.innerHTML = '<h3>♟️ APUNTA AL MARCADOR</h3><p>Toca aquí para rotar cuando veas el alfil</p>';
+            instructions.style.border = '2px solid #4285f4';
         });
 
         // Aplicar primera rotación
         applyRotation();
         
-        console.log('🔄 Sistema de rotación - Sin giro automático');
+        console.log('🚫 Alfil COMPLETAMENTE quieto - Sin animación');
     </script>
 </body>
 </html>
