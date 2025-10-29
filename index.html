@@ -48,8 +48,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL MATEMÁTICO - AR</h3>
-        <p>Superficies cuádricas del alfil</p>
+        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
+        <p>Modelo 3D mejorado</p>
     </div>
 
     <div class="marker-image">
@@ -71,14 +71,13 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- PLANO con la IMAGEN del alfil matemático -->
-            <a-plane 
-                src="alfil_matematico.jpg"
-                position="0 0.3 0"
-                rotation="-90 0 0"
-                width="0.3"
-                height="0.3">
-            </a-plane>
+            <!-- NUEVO MODELO .glb MEJORADO -->
+            <a-entity 
+                gltf-model="alfil_colores_matlab.glb"
+                scale="0.1 0.1 0.1"
+                position="0 0.1 0"
+                rotation="0 0 0">
+            </a-entity>
         </a-marker>
 
         <a-entity camera></a-entity>
@@ -89,17 +88,18 @@
         const instructions = document.querySelector('.instructions');
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Alfil matemático!</h3><p>Superficies cuádricas detectadas</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Modelo 3D mejorado en AR</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL MATEMÁTICO - AR</h3><p>Apunta al marcador con la cámara</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
     </script>
 </body>
 </html>
+
 
 
 
