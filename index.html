@@ -48,8 +48,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
-        <p>Modelo 3D con superficies cuádricas</p>
+        <h3>♟️ ALFIL COMPLETO - AR</h3>
+        <p>Modelo 3D mejorado desde Colab</p>
     </div>
 
     <div class="marker-image">
@@ -71,10 +71,10 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- MODELO GLB - alfil_colores_matlab.glb -->
+            <!-- NUEVO MODELO MEJORADO desde Colab -->
             <a-entity 
-                gltf-model="alfil_colores_matlab.glb"
-                scale="0.1 0.1 0.1"
+                gltf-model="alfil_completo.glb"
+                scale="0.15 0.15 0.15"
                 position="0 0.1 0"
                 rotation="0 0 0">
             </a-entity>
@@ -88,23 +88,23 @@
         const instructions = document.querySelector('.instructions');
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Modelo con superficies cuádricas</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil completo detectado!</h3><p>Piezas unidas correctamente</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL COMPLETO - AR</h3><p>Apunta al marcador con la cámara</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        // Verificar que el modelo se carga
+        // Verificar carga del nuevo modelo
         const alfil = document.querySelector('[gltf-model]');
         alfil.addEventListener('model-loaded', () => {
-            console.log('✅ Modelo GLB cargado correctamente');
+            console.log('✅ alfil_completo.glb cargado correctamente');
         });
         
-        alfil.addEventListener('model-error', () => {
-            console.log('❌ Error cargando modelo GLB');
+        alfil.addEventListener('model-error', (e) => {
+            console.log('❌ Error cargando alfil_completo.glb:', e);
         });
     </script>
 </body>
