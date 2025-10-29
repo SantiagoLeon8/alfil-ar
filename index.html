@@ -9,88 +9,121 @@
             padding: 0;
             overflow: hidden;
             background: black;
-            font-family: Arial, sans-serif;
         }
-        .diagnostic {
+        .instructions {
             position: fixed;
-            top: 50%;
+            top: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.95);
-            color: #333;
-            padding: 20px;
-            border-radius: 15px;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
             z-index: 1000;
             width: 90%;
             max-width: 400px;
         }
-        .status {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
+        .marker-image {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 6px;
+            border-radius: 6px;
+            text-align: center;
+            z-index: 1000;
         }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .loading { background: #fff3cd; color: #856404; }
+        .marker-image img {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #4285f4;
+        }
+        .marker-image p {
+            margin: 3px 0;
+            font-size: 10px;
+        }
+        .controls {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 1000;
+            font-size: 10px;
+        }
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="diagnostic">
-        <h2>🔍 DIAGNÓSTICO AR</h2>
-        
-        <div id="status1" class="status loading">
-            📱 Verificando cámara...
+    <div class="instructions">
+        <h3>♟️ ALFIL - AJUSTAR PIEZAS</h3>
+        <p>Las piezas están separadas - Usa controles</p>
+    </div>
+
+    <div class="controls">
+        <div>
+            <button class="btn" onclick="adjustPiece('scale', 0.05)">+ Tamaño</button>
+            <button class="btn" onclick="adjustPiece('scale', -0.05)">- Tamaño</button>
         </div>
-        
-        <div id="status2" class="status loading">
-            📦 Verificando modelo 3D...
+        <div style="margin-top: 5px;">
+            <button class="btn" onclick="adjustPiece('y', 0.02)">↑ Verde</button>
+            <button class="btn" onclick="adjustPiece('y', -0.02)">↓ Verde</button>
         </div>
-        
-        <div id="status3" class="status loading">
-            🎯 Verificando marcador...
+        <div id="currentAdjust" style="margin-top: 5px; font-size: 9px;">
+            Tamaño: 0.8 | Verde Y: 0.0
         </div>
-        
-        <div id="fileInfo" class="status" style="margin-top: 15px;">
-            📄 Archivo: alfil_colores_matlab.glb
-        </div>
-        
-        <div style="margin-top: 15px;">
-            <button onclick="location.reload()" style="
-                background: #4285f4;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 8px;
-                cursor: pointer;
-            ">🔄 Recargar</button>
-        </div>
+    </div>
+
+    <div class="marker-image">
+        <p>Marcador:</p>
+        <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" alt="Marcador AR">
     </div>
 
     <a-scene 
         vr-mode-ui="enabled: false"
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono; maxDetectionRate: 30;"
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
         renderer="colorManagement: true;">
 
         <!-- LUZ AMBIENTAL -->
         <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.5"></a-entity>
-        
-        <!-- LUZ DIRECCIONAL -->
         <a-entity light="type: directional; color: #FFFFFF; intensity: 1.8" position="2 5 3"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Modelo 3D con verificación -->
-            <a-entity 
-                id="alfilModel"
-                gltf-model="alfil_colores_matlab.glb"
-                scale="0.1 0.1 0.1"
-                position="0 0.1 0"
-                rotation="0 0 0">
+            <!-- CONTENEDOR PRINCIPAL -->
+            <a-entity id="alfilContainer" position="0 0.1 0" rotation="0 0 0">
+                <!-- PIEZA PRINCIPAL (probablemente azul/roja) -->
+                <a-entity 
+                    gltf-model="alfil_colores_matlab.glb"
+                    scale="0.8 0.8 0.8"
+                    id="piezaPrincipal">
+                </a-entity>
+                
+                <!-- PIEZA VERDE (separada) -->
+                <a-entity 
+                    gltf-model="alfil_colores_matlab.glb"
+                    scale="0.8 0.8 0.8"
+                    position="0 0.1 0"
+                    id="piezaVerde">
+                </a-entity>
             </a-entity>
         </a-marker>
 
@@ -98,63 +131,40 @@
     </a-scene>
 
     <script>
-        // Verificar estado de la cámara
-        const status1 = document.getElementById('status1');
-        const status2 = document.getElementById('status2');
-        const status3 = document.getElementById('status3');
-        const alfilModel = document.getElementById('alfilModel');
+        let scaleValue = 0.8;
+        let verdeY = 0.0;
+        const piezaVerde = document.getElementById('piezaVerde');
+        const piezaPrincipal = document.getElementById('piezaPrincipal');
+        const currentAdjust = document.getElementById('currentAdjust');
         
-        // Verificar si el archivo existe
-        fetch('alfil_colores_matlab.glb')
-            .then(response => {
-                if (response.ok) {
-                    status2.innerHTML = '✅ Modelo 3D encontrado';
-                    status2.className = 'status success';
-                } else {
-                    status2.innerHTML = '❌ Modelo 3D NO encontrado';
-                    status2.className = 'status error';
-                }
-            })
-            .catch(error => {
-                status2.innerHTML = '❌ Error cargando modelo';
-                status2.className = 'status error';
-            });
-        
-        // Verificar cuando se carga el modelo
-        alfilModel.addEventListener('model-loaded', () => {
-            status2.innerHTML = '✅ Modelo 3D cargado correctamente';
-            status2.className = 'status success';
+        function adjustPiece(type, value) {
+            if (type === 'scale') {
+                scaleValue = Math.max(0.1, scaleValue + value);
+                piezaPrincipal.setAttribute('scale', `${scaleValue} ${scaleValue} ${scaleValue}`);
+                piezaVerde.setAttribute('scale', `${scaleValue} ${scaleValue} ${scaleValue}`);
+            }
+            else if (type === 'y') {
+                verdeY += value;
+                piezaVerde.setAttribute('position', `0 ${verdeY} 0`);
+            }
             
-            // Ocultar diagnóstico después de 3 segundos
-            setTimeout(() => {
-                document.querySelector('.diagnostic').style.display = 'none';
-            }, 3000);
-        });
+            currentAdjust.textContent = `Tamaño: ${scaleValue.toFixed(1)} | Verde Y: ${verdeY.toFixed(2)}`;
+        }
         
-        alfilModel.addEventListener('model-error', () => {
-            status2.innerHTML = '❌ Error al cargar el modelo GLB';
-            status2.className = 'status error';
-        });
-        
-        // Verificar marcador
         const marker = document.getElementById('marker');
+        const instructions = document.querySelector('.instructions');
+        
         marker.addEventListener('markerFound', () => {
-            status3.innerHTML = '✅ Marcador detectado';
-            status3.className = 'status success';
+            instructions.innerHTML = '<h3>🎉 Alfil detectado</h3><p>Ajusta piezas con controles</p>';
+            instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            status3.innerHTML = '🎯 Buscando marcador...';
-            status3.className = 'status loading';
+            instructions.innerHTML = '<h3>♟️ ALFIL - AJUSTAR PIEZAS</h3><p>Las piezas están separadas</p>';
+            instructions.style.background = 'rgba(0,0,0,0.8)';
         });
-        
-        // Verificar cámara
-        setTimeout(() => {
-            status1.innerHTML = '✅ Cámara activada';
-            status1.className = 'status success';
-        }, 2000);
-        
-        console.log('🔍 Iniciando diagnóstico...');
+
+        console.log('🔧 Modo ajuste de piezas activado');
     </script>
 </body>
 </html>
