@@ -45,18 +45,20 @@
             margin: 3px 0;
             font-size: 10px;
         }
-        .rotation-controls {
+        .controls {
             position: fixed;
-            top: 100px;
+            top: 80px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255,255,255,0.9);
+            color: #333;
             padding: 10px;
             border-radius: 8px;
-            z-index: 1000;
             text-align: center;
+            z-index: 1000;
+            font-size: 12px;
         }
-        .rotation-btn {
+        .btn {
             background: #4285f4;
             color: white;
             border: none;
@@ -64,25 +66,34 @@
             margin: 2px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
     </style>
 </head>
 <body>
     <div class="instructions" id="instructions">
-        <h3>♟️ ALFIL - AJUSTA LA ORIENTACIÓN</h3>
-        <p>Usa los botones para girar hasta que se vea correcto</p>
+        <h3>♟️ NUEVO ALFIL - AJUSTAR</h3>
+        <p>Toca los botones para ajustar posición y rotación</p>
     </div>
 
-    <div class="rotation-controls">
-        <button class="rotation-btn" onclick="rotateX(90)">X+90°</button>
-        <button class="rotation-btn" onclick="rotateX(-90)">X-90°</button>
-        <button class="rotation-btn" onclick="rotateY(90)">Y+90°</button>
-        <button class="rotation-btn" onclick="rotateY(-90)">Y-90°</button>
-        <button class="rotation-btn" onclick="rotateZ(90)">Z+90°</button>
-        <button class="rotation-btn" onclick="rotateZ(-90)">Z-90°</button>
-        <br>
-        <button class="rotation-btn" onclick="resetRotation()" style="background: #ea4335;">Reset</button>
+    <div class="controls" id="controls">
+        <div>
+            <button class="btn" onclick="adjustRotation('x+')">X+</button>
+            <button class="btn" onclick="adjustRotation('x-')">X-</button>
+            <button class="btn" onclick="adjustRotation('y+')">Y+</button>
+            <button class="btn" onclick="adjustRotation('y-')">Y-</button>
+            <button class="btn" onclick="adjustRotation('z+')">Z+</button>
+            <button class="btn" onclick="adjustRotation('z-')">Z-</button>
+        </div>
+        <div style="margin-top: 5px;">
+            <button class="btn" onclick="adjustScale('+')">Agrandar</button>
+            <button class="btn" onclick="adjustScale('-')">Reducir</button>
+            <button class="btn" onclick="adjustPosition('up')">Subir</button>
+            <button class="btn" onclick="adjustPosition('down')">Bajar</button>
+        </div>
+        <div id="currentValues" style="margin-top: 5px; font-size: 10px;">
+            Rot: 0,0,0 | Esc: 0.2 | Pos: 0,0.1,0
+        </div>
     </div>
 
     <div class="marker-image">
@@ -108,13 +119,13 @@
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Tu alfil 3D - ORIENTACIÓN INICIAL -->
+            <!-- NUEVO alfil 3D - VALORES INICIALES PARA FORMA NUEVA -->
             <a-entity 
                 id="alfil"
                 gltf-model="alfil.glb"
-                scale="0.15 0.15 0.15"
-                position="0 0.2 0"
-                rotation="0 0 0">
+                scale="0.2 0.2 0.2"    <!-- Escala inicial más pequeña -->
+                position="0 0.1 0"      <!-- Posición inicial -->
+                rotation="0 0 0">       <!-- Rotación inicial -->
             </a-entity>
         </a-marker>
 
@@ -123,56 +134,64 @@
 
     <script>
         const alfil = document.getElementById('alfil');
-        let currentRotation = { x: 0, y: 0, z: 0 };
+        const instructions = document.getElementById('instructions');
+        const currentValues = document.getElementById('currentValues');
         
-        function updateRotation() {
-            alfil.setAttribute('rotation', 
-                `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+        let rotation = { x: 0, y: 0, z: 0 };
+        let scale = 0.2;
+        let position = { x: 0, y: 0.1, z: 0 };
+        
+        function updateAlfil() {
+            alfil.setAttribute('rotation', `${rotation.x} ${rotation.y} ${rotation.z}`);
+            alfil.setAttribute('scale', `${scale} ${scale} ${scale}`);
+            alfil.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
             
-            document.getElementById('instructions').innerHTML = 
-                `<h3>♟️ ORIENTACIÓN ACTUAL</h3><p>X: ${currentRotation.x}° Y: ${currentRotation.y}° Z: ${currentRotation.z}°</p>`;
+            currentValues.textContent = 
+                `Rot: ${rotation.x},${rotation.y},${rotation.z} | Esc: ${scale} | Pos: ${position.x},${position.y},${position.z}`;
         }
         
-        function rotateX(degrees) {
-            currentRotation.x = (currentRotation.x + degrees) % 360;
-            updateRotation();
+        function adjustRotation(axis) {
+            const step = 15; // Grados
+            switch(axis) {
+                case 'x+': rotation.x += step; break;
+                case 'x-': rotation.x -= step; break;
+                case 'y+': rotation.y += step; break;
+                case 'y-': rotation.y -= step; break;
+                case 'z+': rotation.z += step; break;
+                case 'z-': rotation.z -= step; break;
+            }
+            updateAlfil();
         }
         
-        function rotateY(degrees) {
-            currentRotation.y = (currentRotation.y + degrees) % 360;
-            updateRotation();
+        function adjustScale(direction) {
+            const step = 0.05;
+            if (direction === '+') scale += step;
+            else scale -= step;
+            updateAlfil();
         }
         
-        function rotateZ(degrees) {
-            currentRotation.z = (currentRotation.z + degrees) % 360;
-            updateRotation();
+        function adjustPosition(direction) {
+            const step = 0.02;
+            if (direction === 'up') position.y += step;
+            else position.y -= step;
+            updateAlfil();
         }
         
-        function resetRotation() {
-            currentRotation = { x: 0, y: 0, z: 0 };
-            updateRotation();
-        }
-        
-        // Posición inicial común para alfiles
-        function setCommonBishopPosition() {
-            // Esta es una posición común para alfiles 3D
-            currentRotation = { x: -90, y: 0, z: 0 };
-            updateRotation();
-        }
-        
-        // Intentar posición común al cargar
-        setTimeout(setCommonBishopPosition, 1000);
+        // Aplicar configuración inicial
+        updateAlfil();
         
         const marker = document.getElementById('marker');
         marker.addEventListener('markerFound', () => {
-            document.getElementById('instructions').style.background = 'rgba(0,150,0,0.8)';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Usa los controles para ajustar</p>';
+            instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            document.getElementById('instructions').style.background = 'rgba(0,0,0,0.8)';
+            instructions.innerHTML = '<h3>♟️ NUEVO ALFIL - AJUSTAR</h3><p>Apunta al marcador con la cámara</p>';
+            instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎮 Controles de rotación activados');
+        console.log('🎛️ Sistema de ajuste activado para nuevo modelo');
     </script>
 </body>
 </html>
