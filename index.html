@@ -48,8 +48,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL - NUEVO MODELO</h3>
-        <p>Probando archivo corregido</p>
+        <h3>♟️ ALFIL MATEMÁTICO - AR</h3>
+        <p>Colores: Rojo, Azul, Verde, Amarillo</p>
     </div>
 
     <div class="marker-image">
@@ -64,18 +64,19 @@
         renderer="colorManagement: true;">
 
         <!-- LUZ AMBIENTAL MUY FUERTE -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.5"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.0" position="2 10 5"></a-entity>
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 3.0"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.5" position="2 10 5"></a-entity>
+        <a-entity light="type: point; color: #FFFFFF; intensity: 2.0" position="0 5 3"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- NUEVO ARCHIVO CORREGIDO -->
+            <!-- ARCHIVO COMPLETO CON COLORES CORRECTOS -->
             <a-entity 
-                gltf-model="alfil_colores_matlab_partes_glb_correcto.glb"
-                scale="0.3 0.3 0.3"
-                position="0 0.3 0"
+                gltf-model="alfil_colores_matlab_glb_correcto.glb"
+                scale="1.0 1.0 1.0"
+                position="0 0.08 0"
                 rotation="0 0 0">
             </a-entity>
         </a-marker>
@@ -86,18 +87,36 @@
     <script>
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
+        const alfil = document.querySelector('[gltf-model]');
         
-        // Verificar carga del modelo
-        const model = document.querySelector('[gltf-model]');
-        
-        model.addEventListener('model-loaded', () => {
-            console.log('✅ ✅ NUEVO MODELO CARGADO EXITOSAMENTE');
-            instructions.innerHTML = '<h3>🎉 ¡Nuevo modelo cargado!</h3><p>Archivo corregido detectado</p>';
+        // Verificar carga y ajustar si es necesario
+        alfil.addEventListener('model-loaded', () => {
+            console.log('✅ Modelo completo cargado - 15cm de altura');
+            instructions.innerHTML = '<h3>🎉 ¡Alfil matemático!</h3><p>15cm - Colores correctos</p>';
+            
+            // Probar diferentes escalas si es muy pequeño
+            setTimeout(() => {
+                const scales = [1.0, 1.5, 2.0, 2.5];
+                let currentScale = 0;
+                
+                const tryScale = () => {
+                    if (currentScale < scales.length) {
+                        alfil.setAttribute('scale', 
+                            `${scales[currentScale]} ${scales[currentScale]} ${scales[currentScale]}`);
+                        console.log(`Escala probada: ${scales[currentScale]}`);
+                        currentScale++;
+                        if (currentScale < scales.length) {
+                            setTimeout(tryScale, 1000);
+                        }
+                    }
+                };
+                tryScale();
+            }, 1000);
         });
         
-        model.addEventListener('model-error', (e) => {
-            console.error('❌ Error cargando nuevo modelo:', e);
-            instructions.innerHTML = '<h3>❌ Error con nuevo archivo</h3><p>Verifica el nombre exacto</p>';
+        alfil.addEventListener('model-error', (e) => {
+            console.error('❌ Error:', e);
+            instructions.innerHTML = '<h3>❌ Error cargando modelo</h3>';
         });
         
         marker.addEventListener('markerFound', () => {
@@ -105,11 +124,12 @@
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL - NUEVO MODELO</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL MATEMÁTICO - AR</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🔄 Probando con archivo corregido...');
+        console.log('🎯 Cargando alfil con colores correctos...');
     </script>
 </body>
 </html>
+
