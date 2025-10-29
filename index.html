@@ -48,8 +48,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL MATEMÁTICO - AR</h3>
-        <p>Piezas unidas y tamaño aumentado</p>
+        <h3>♟️ ALFIL UNIDO - AR</h3>
+        <p>Piezas completamente pegadas - Sin huecos</p>
     </div>
 
     <div class="marker-image">
@@ -72,11 +72,11 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- ARCHIVO COMPLETO - ESCALA GRANDE -->
+            <!-- NUEVO ARCHIVO UNIDO - ESCALA GRANDE -->
             <a-entity 
-                gltf-model="alfil_colores_matlab_glb_correcto.glb"
-                scale="3.0 3.0 3.0"
-                position="0 0.3 0"
+                gltf-model="alfil_unido_final.glb"
+                scale="4.0 4.0 4.0"
+                position="0 0.4 0"
                 rotation="0 0 0">
             </a-entity>
         </a-marker>
@@ -90,13 +90,17 @@
         const alfil = document.querySelector('[gltf-model]');
         
         alfil.addEventListener('model-loaded', () => {
-            console.log('✅ Modelo cargado - Escala 3.0 (45cm)');
-            instructions.innerHTML = '<h3>🎉 ¡Alfil a 45cm!</h3><p>Piezas unidas - Tamaño aumentado</p>';
+            console.log('✅ alfil_unido_final.glb cargado - Piezas UNIDAS');
+            instructions.innerHTML = '<h3>🎉 ¡Alfil completamente unido!</h3><p>60cm - Sin huecos entre piezas</p>';
+            
+            // Verificar en consola
+            console.log('📏 Escala: 4.0 (60cm)');
+            console.log('🎨 Colores: Rojo-Azul-Verde-Amarillo');
         });
         
         alfil.addEventListener('model-error', (e) => {
-            console.error('❌ Error:', e);
-            instructions.innerHTML = '<h3>❌ Error cargando modelo</h3>';
+            console.error('❌ Error cargando alfil_unido_final.glb:', e);
+            instructions.innerHTML = '<h3>❌ Error con nuevo archivo</h3><p>Verifica alfil_unido_final.glb</p>';
         });
         
         marker.addEventListener('markerFound', () => {
@@ -104,14 +108,11 @@
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL MATEMÁTICO - AR</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL UNIDO - AR</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎯 Cargando alfil unido a escala grande...');
+        console.log('🔄 Cargando alfil_unido_final.glb...');
     </script>
 </body>
 </html>
-
-
-
