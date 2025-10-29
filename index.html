@@ -44,49 +44,12 @@
             margin: 3px 0;
             font-size: 10px;
         }
-        .controls {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.9);
-            color: #333;
-            padding: 8px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 1000;
-            font-size: 10px;
-        }
-        .btn {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 5px 8px;
-            margin: 2px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL - AJUSTAR PIEZAS</h3>
-        <p>Las piezas están separadas - Usa controles</p>
-    </div>
-
-    <div class="controls">
-        <div>
-            <button class="btn" onclick="adjustPiece('scale', 0.05)">+ Tamaño</button>
-            <button class="btn" onclick="adjustPiece('scale', -0.05)">- Tamaño</button>
-        </div>
-        <div style="margin-top: 5px;">
-            <button class="btn" onclick="adjustPiece('y', 0.02)">↑ Verde</button>
-            <button class="btn" onclick="adjustPiece('y', -0.02)">↓ Verde</button>
-        </div>
-        <div id="currentAdjust" style="margin-top: 5px; font-size: 9px;">
-            Tamaño: 0.8 | Verde Y: 0.0
-        </div>
+        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
+        <p>Figura completa y en posición correcta</p>
     </div>
 
     <div class="marker-image">
@@ -108,22 +71,12 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- CONTENEDOR PRINCIPAL -->
-            <a-entity id="alfilContainer" position="0 0.1 0" rotation="0 0 0">
-                <!-- PIEZA PRINCIPAL (probablemente azul/roja) -->
-                <a-entity 
-                    gltf-model="alfil_colores_matlab.glb"
-                    scale="0.8 0.8 0.8"
-                    id="piezaPrincipal">
-                </a-entity>
-                
-                <!-- PIEZA VERDE (separada) -->
-                <a-entity 
-                    gltf-model="alfil_colores_matlab.glb"
-                    scale="0.8 0.8 0.8"
-                    position="0 0.1 0"
-                    id="piezaVerde">
-                </a-entity>
+            <!-- ALFIL COMPLETO Y CORREGIDO -->
+            <a-entity 
+                gltf-model="alfil_colores_matlab.glb"
+                scale="0.1 0.1 0.1"      <!-- Más pequeño para evitar traslapes -->
+                position="0 0.08 0"      <!-- Más cerca del marcador -->
+                rotation="180 0 0">      <!-- VOLTEADO - parte arriba arriba -->
             </a-entity>
         </a-marker>
 
@@ -131,43 +84,24 @@
     </a-scene>
 
     <script>
-        let scaleValue = 0.8;
-        let verdeY = 0.0;
-        const piezaVerde = document.getElementById('piezaVerde');
-        const piezaPrincipal = document.getElementById('piezaPrincipal');
-        const currentAdjust = document.getElementById('currentAdjust');
-        
-        function adjustPiece(type, value) {
-            if (type === 'scale') {
-                scaleValue = Math.max(0.1, scaleValue + value);
-                piezaPrincipal.setAttribute('scale', `${scaleValue} ${scaleValue} ${scaleValue}`);
-                piezaVerde.setAttribute('scale', `${scaleValue} ${scaleValue} ${scaleValue}`);
-            }
-            else if (type === 'y') {
-                verdeY += value;
-                piezaVerde.setAttribute('position', `0 ${verdeY} 0`);
-            }
-            
-            currentAdjust.textContent = `Tamaño: ${scaleValue.toFixed(1)} | Verde Y: ${verdeY.toFixed(2)}`;
-        }
-        
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 Alfil detectado</h3><p>Ajusta piezas con controles</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Figura completa y en posición correcta</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL - AJUSTAR PIEZAS</h3><p>Las piezas están separadas</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🔧 Modo ajuste de piezas activado');
+        console.log('✅ Alfil corregido - Piezas unidas y posición correcta');
     </script>
 </body>
 </html>
+
 
 
 
