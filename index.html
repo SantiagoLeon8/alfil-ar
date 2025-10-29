@@ -23,6 +23,7 @@
             z-index: 1000;
             width: 90%;
             max-width: 400px;
+            cursor: pointer;
         }
         .marker-image {
             position: fixed;
@@ -44,12 +45,44 @@
             margin: 3px 0;
             font-size: 10px;
         }
+        .rotation-controls {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+            text-align: center;
+        }
+        .rotation-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <div class="instructions">
-        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
-        <p>Alfil en posición correcta - Parte superior arriba</p>
+    <div class="instructions" id="instructions">
+        <h3>♟️ ALFIL - AJUSTA LA ORIENTACIÓN</h3>
+        <p>Usa los botones para girar hasta que se vea correcto</p>
+    </div>
+
+    <div class="rotation-controls">
+        <button class="rotation-btn" onclick="rotateX(90)">X+90°</button>
+        <button class="rotation-btn" onclick="rotateX(-90)">X-90°</button>
+        <button class="rotation-btn" onclick="rotateY(90)">Y+90°</button>
+        <button class="rotation-btn" onclick="rotateY(-90)">Y-90°</button>
+        <button class="rotation-btn" onclick="rotateZ(90)">Z+90°</button>
+        <button class="rotation-btn" onclick="rotateZ(-90)">Z-90°</button>
+        <br>
+        <button class="rotation-btn" onclick="resetRotation()" style="background: #ea4335;">Reset</button>
     </div>
 
     <div class="marker-image">
@@ -75,12 +108,13 @@
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- Tu alfil 3D - VOLTEADO 180 GRADOS -->
+            <!-- Tu alfil 3D - ORIENTACIÓN INICIAL -->
             <a-entity 
+                id="alfil"
                 gltf-model="alfil.glb"
                 scale="0.15 0.15 0.15"
-                position="0 0.15 0"
-                rotation="180 0 0">  <!-- 180 GRADOS - PARTE SUPERIOR ARRIBA -->
+                position="0 0.2 0"
+                rotation="0 0 0">
             </a-entity>
         </a-marker>
 
@@ -88,21 +122,59 @@
     </a-scene>
 
     <script>
-        const marker = document.getElementById('marker');
-        const instructions = document.querySelector('.instructions');
+        const alfil = document.getElementById('alfil');
+        let currentRotation = { x: 0, y: 0, z: 0 };
         
+        function updateRotation() {
+            alfil.setAttribute('rotation', 
+                `${currentRotation.x} ${currentRotation.y} ${currentRotation.z}`);
+            
+            document.getElementById('instructions').innerHTML = 
+                `<h3>♟️ ORIENTACIÓN ACTUAL</h3><p>X: ${currentRotation.x}° Y: ${currentRotation.y}° Z: ${currentRotation.z}°</p>`;
+        }
+        
+        function rotateX(degrees) {
+            currentRotation.x = (currentRotation.x + degrees) % 360;
+            updateRotation();
+        }
+        
+        function rotateY(degrees) {
+            currentRotation.y = (currentRotation.y + degrees) % 360;
+            updateRotation();
+        }
+        
+        function rotateZ(degrees) {
+            currentRotation.z = (currentRotation.z + degrees) % 360;
+            updateRotation();
+        }
+        
+        function resetRotation() {
+            currentRotation = { x: 0, y: 0, z: 0 };
+            updateRotation();
+        }
+        
+        // Posición inicial común para alfiles
+        function setCommonBishopPosition() {
+            // Esta es una posición común para alfiles 3D
+            currentRotation = { x: -90, y: 0, z: 0 };
+            updateRotation();
+        }
+        
+        // Intentar posición común al cargar
+        setTimeout(setCommonBishopPosition, 1000);
+        
+        const marker = document.getElementById('marker');
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Parte superior arriba - Base abajo</p>';
-            instructions.style.background = 'rgba(0,150,0,0.8)';
+            document.getElementById('instructions').style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
-            instructions.style.background = 'rgba(0,0,0,0.8)';
+            document.getElementById('instructions').style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('✅ Alfil volteado 180° - Parte superior arriba');
+        console.log('🎮 Controles de rotación activados');
     </script>
 </body>
 </html>
+
 
