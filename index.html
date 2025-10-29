@@ -49,7 +49,7 @@
 <body>
     <div class="instructions">
         <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
-        <p>Modelo 3D mejorado</p>
+        <p>Modelo 3D con superficies cuádricas</p>
     </div>
 
     <div class="marker-image">
@@ -71,7 +71,7 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- NUEVO MODELO .glb MEJORADO -->
+            <!-- MODELO GLB - alfil_colores_matlab.glb -->
             <a-entity 
                 gltf-model="alfil_colores_matlab.glb"
                 scale="0.1 0.1 0.1"
@@ -88,7 +88,7 @@
         const instructions = document.querySelector('.instructions');
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Modelo 3D mejorado en AR</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Modelo con superficies cuádricas</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
@@ -96,9 +96,20 @@
             instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
+
+        // Verificar que el modelo se carga
+        const alfil = document.querySelector('[gltf-model]');
+        alfil.addEventListener('model-loaded', () => {
+            console.log('✅ Modelo GLB cargado correctamente');
+        });
+        
+        alfil.addEventListener('model-error', () => {
+            console.log('❌ Error cargando modelo GLB');
+        });
     </script>
 </body>
 </html>
+
 
 
 
