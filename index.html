@@ -48,8 +48,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL UNIDO - AR</h3>
-        <p>Piezas completamente pegadas - Sin huecos</p>
+        <h3>♟️ ALFIL CORREGIDO - AR</h3>
+        <p>Posición correcta - Colores vibrantes</p>
     </div>
 
     <div class="marker-image">
@@ -61,23 +61,30 @@
         vr-mode-ui="enabled: false"
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
-        renderer="colorManagement: true;">
+        renderer="colorManagement: true; physicallyCorrectLights: true;">
 
-        <!-- LUZ AMBIENTAL MUY FUERTE -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 3.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 4.0" position="3 12 6"></a-entity>
-        <a-entity light="type: point; color: #FFFFFF; intensity: 2.5" position="0 8 4"></a-entity>
+        <!-- LUZ AMBIENTAL EXTRA BRILLANTE -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 4.0"></a-entity>
+        
+        <!-- MÚLTIPLES LUCES DIRECCIONALES PARA COLORES VIBRANTES -->
+        <a-entity light="type: directional; color: #FF4444; intensity: 3.0" position="5 15 8"></a-entity>
+        <a-entity light="type: directional; color: #4444FF; intensity: 3.0" position="-5 15 8"></a-entity>
+        <a-entity light="type: directional; color: #44FF44; intensity: 3.0" position="0 20 5"></a-entity>
+        <a-entity light="type: directional; color: #FFFF44; intensity: 3.0" position="0 15 10"></a-entity>
+        
+        <!-- LUZ PUNTUAL ADICIONAL -->
+        <a-entity light="type: point; color: #FFFFFF; intensity: 4.0" position="0 10 5"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- NUEVO ARCHIVO UNIDO - ESCALA GRANDE -->
+            <!-- ALFIL VOLTEADO 180° Y CON ESCALA GRANDE -->
             <a-entity 
                 gltf-model="alfil_unido_final.glb"
-                scale="4.0 4.0 4.0"
-                position="0 0.4 0"
-                rotation="0 0 0">
+                scale="5.0 5.0 5.0"
+                position="0 0.5 0"
+                rotation="180 0 0">  <!-- VOLTEADO 180° -->
             </a-entity>
         </a-marker>
 
@@ -90,17 +97,26 @@
         const alfil = document.querySelector('[gltf-model]');
         
         alfil.addEventListener('model-loaded', () => {
-            console.log('✅ alfil_unido_final.glb cargado - Piezas UNIDAS');
-            instructions.innerHTML = '<h3>🎉 ¡Alfil completamente unido!</h3><p>60cm - Sin huecos entre piezas</p>';
+            console.log('✅ Alfil cargado - Posición corregida');
+            instructions.innerHTML = '<h3>🎉 ¡Alfil en posición correcta!</h3><p>Base abajo - Cabeza arriba</p>';
             
-            // Verificar en consola
-            console.log('📏 Escala: 4.0 (60cm)');
-            console.log('🎨 Colores: Rojo-Azul-Verde-Amarillo');
+            // Aplicar materiales más brillantes si es posible
+            setTimeout(() => {
+                const model = alfil.getObject3D('mesh');
+                if (model) {
+                    model.traverse((node) => {
+                        if (node.isMesh && node.material) {
+                            // Hacer materiales más brillantes
+                            node.material.emissiveIntensity = 0.3;
+                            node.material.needsUpdate = true;
+                        }
+                    });
+                }
+            }, 500);
         });
         
         alfil.addEventListener('model-error', (e) => {
-            console.error('❌ Error cargando alfil_unido_final.glb:', e);
-            instructions.innerHTML = '<h3>❌ Error con nuevo archivo</h3><p>Verifica alfil_unido_final.glb</p>';
+            console.error('❌ Error:', e);
         });
         
         marker.addEventListener('markerFound', () => {
@@ -108,11 +124,11 @@
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL UNIDO - AR</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL CORREGIDO - AR</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🔄 Cargando alfil_unido_final.glb...');
+        console.log('🎨 Cargando alfil con colores vibrantes...');
     </script>
 </body>
 </html>
