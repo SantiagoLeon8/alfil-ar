@@ -23,7 +23,6 @@
             z-index: 1000;
             width: 90%;
             max-width: 400px;
-            cursor: pointer;
         }
         .marker-image {
             position: fixed;
@@ -45,55 +44,12 @@
             margin: 3px 0;
             font-size: 10px;
         }
-        .controls {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.9);
-            color: #333;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 1000;
-            font-size: 12px;
-        }
-        .btn {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            margin: 2px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 11px;
-        }
     </style>
 </head>
 <body>
-    <div class="instructions" id="instructions">
-        <h3>♟️ NUEVO ALFIL - AJUSTAR</h3>
-        <p>Toca los botones para ajustar posición y rotación</p>
-    </div>
-
-    <div class="controls" id="controls">
-        <div>
-            <button class="btn" onclick="adjustRotation('x+')">X+</button>
-            <button class="btn" onclick="adjustRotation('x-')">X-</button>
-            <button class="btn" onclick="adjustRotation('y+')">Y+</button>
-            <button class="btn" onclick="adjustRotation('y-')">Y-</button>
-            <button class="btn" onclick="adjustRotation('z+')">Z+</button>
-            <button class="btn" onclick="adjustRotation('z-')">Z-</button>
-        </div>
-        <div style="margin-top: 5px;">
-            <button class="btn" onclick="adjustScale('+')">Agrandar</button>
-            <button class="btn" onclick="adjustScale('-')">Reducir</button>
-            <button class="btn" onclick="adjustPosition('up')">Subir</button>
-            <button class="btn" onclick="adjustPosition('down')">Bajar</button>
-        </div>
-        <div id="currentValues" style="margin-top: 5px; font-size: 10px;">
-            Rot: 0,0,0 | Esc: 0.2 | Pos: 0,0.1,0
-        </div>
+    <div class="instructions">
+        <h3>♟️ ALFIL DE AJEDREZ - AR</h3>
+        <p>Modelo con superficies cuádricas</p>
     </div>
 
     <div class="marker-image">
@@ -119,13 +75,12 @@
         <a-marker id="marker" type="pattern" preset="hiro" emiteEvents="true"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- NUEVO alfil 3D - VALORES INICIALES PARA FORMA NUEVA -->
+            <!-- NUEVO alfil 3D - ROTACIÓN SIMPLE -->
             <a-entity 
-                id="alfil"
-                gltf-model="alfil.glb"
-                scale="0.2 0.2 0.2"    <!-- Escala inicial más pequeña -->
-                position="0 0.1 0"      <!-- Posición inicial -->
-                rotation="0 0 0">       <!-- Rotación inicial -->
+                gltf-model="alfil_colores_matlab.glb"
+                scale="0.15 0.15 0.15"
+                position="0 0.1 0"
+                rotation="0 0 0">
             </a-entity>
         </a-marker>
 
@@ -133,67 +88,23 @@
     </a-scene>
 
     <script>
-        const alfil = document.getElementById('alfil');
-        const instructions = document.getElementById('instructions');
-        const currentValues = document.getElementById('currentValues');
-        
-        let rotation = { x: 0, y: 0, z: 0 };
-        let scale = 0.2;
-        let position = { x: 0, y: 0.1, z: 0 };
-        
-        function updateAlfil() {
-            alfil.setAttribute('rotation', `${rotation.x} ${rotation.y} ${rotation.z}`);
-            alfil.setAttribute('scale', `${scale} ${scale} ${scale}`);
-            alfil.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-            
-            currentValues.textContent = 
-                `Rot: ${rotation.x},${rotation.y},${rotation.z} | Esc: ${scale} | Pos: ${position.x},${position.y},${position.z}`;
-        }
-        
-        function adjustRotation(axis) {
-            const step = 15; // Grados
-            switch(axis) {
-                case 'x+': rotation.x += step; break;
-                case 'x-': rotation.x -= step; break;
-                case 'y+': rotation.y += step; break;
-                case 'y-': rotation.y -= step; break;
-                case 'z+': rotation.z += step; break;
-                case 'z-': rotation.z -= step; break;
-            }
-            updateAlfil();
-        }
-        
-        function adjustScale(direction) {
-            const step = 0.05;
-            if (direction === '+') scale += step;
-            else scale -= step;
-            updateAlfil();
-        }
-        
-        function adjustPosition(direction) {
-            const step = 0.02;
-            if (direction === 'up') position.y += step;
-            else position.y -= step;
-            updateAlfil();
-        }
-        
-        // Aplicar configuración inicial
-        updateAlfil();
-        
         const marker = document.getElementById('marker');
+        const instructions = document.querySelector('.instructions');
+        
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Usa los controles para ajustar</p>';
+            instructions.innerHTML = '<h3>🎉 ¡Alfil detectado!</h3><p>Modelo con superficies cuádricas</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ NUEVO ALFIL - AJUSTAR</h3><p>Apunta al marcador con la cámara</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL DE AJEDREZ - AR</h3><p>Apunta al marcador con la cámara</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎛️ Sistema de ajuste activado para nuevo modelo');
+        console.log('✅ Código simplificado - Sin controles');
     </script>
 </body>
 </html>
+
 
 
