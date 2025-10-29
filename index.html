@@ -9,31 +9,21 @@
             padding: 0;
             overflow: hidden;
             background: black;
-            font-family: Arial, sans-serif;
         }
-        .diagnostic {
+        .instructions {
             position: fixed;
-            top: 50%;
+            top: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.95);
-            color: #333;
-            padding: 20px;
-            border-radius: 15px;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
             z-index: 1000;
             width: 90%;
             max-width: 400px;
         }
-        .status {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .loading { background: #fff3cd; color: #856404; }
         .marker-image {
             position: fixed;
             bottom: 15px;
@@ -50,23 +40,16 @@
             height: 50px;
             border: 1px solid #4285f4;
         }
+        .marker-image p {
+            margin: 3px 0;
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="diagnostic" id="diagnostic">
-        <h2>🔍 DIAGNÓSTICO DEL MODELO</h2>
-        
-        <div id="status1" class="status loading">
-            📦 Verificando archivo alfil_completo.glb...
-        </div>
-        
-        <div id="status2" class="status loading">
-            🎯 Esperando marcador...
-        </div>
-        
-        <div id="fileInfo" class="status">
-            📄 Archivo: alfil_completo.glb
-        </div>
+    <div class="instructions">
+        <h3>♟️ ALFIL - NUEVO MODELO</h3>
+        <p>Probando archivo corregido</p>
     </div>
 
     <div class="marker-image">
@@ -80,20 +63,19 @@
         arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
         renderer="colorManagement: true;">
 
-        <!-- LUZ AMBIENTAL -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 2.5" position="3 8 5"></a-entity>
+        <!-- LUZ AMBIENTAL MUY FUERTE -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.5"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.0" position="2 10 5"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- MODELO CON MÚLTIPLES ESCALAS PARA PROBAR -->
+            <!-- NUEVO ARCHIVO CORREGIDO -->
             <a-entity 
-                id="alfilModel"
-                gltf-model="alfil_completo.glb"
-                scale="0.2 0.2 0.2"
-                position="0 0.2 0"
+                gltf-model="alfil_colores_matlab_partes_glb_correcto.glb"
+                scale="0.3 0.3 0.3"
+                position="0 0.3 0"
                 rotation="0 0 0">
             </a-entity>
         </a-marker>
@@ -102,87 +84,32 @@
     </a-scene>
 
     <script>
-        const diagnostic = document.getElementById('diagnostic');
-        const status1 = document.getElementById('status1');
-        const status2 = document.getElementById('status2');
-        const alfilModel = document.getElementById('alfilModel');
-        
-        // 1. Verificar si el archivo existe
-        fetch('alfil_completo.glb')
-            .then(response => {
-                if (response.ok) {
-                    status1.innerHTML = '✅ Archivo alfil_completo.glb ENCONTRADO';
-                    status1.className = 'status success';
-                } else {
-                    status1.innerHTML = '❌ ERROR: alfil_completo.glb NO encontrado';
-                    status1.className = 'status error';
-                    document.getElementById('fileInfo').innerHTML = 
-                        '❌ El archivo alfil_completo.glb no existe en el servidor';
-                }
-            })
-            .catch(error => {
-                status1.innerHTML = '❌ ERROR de red al cargar el archivo';
-                status1.className = 'status error';
-            });
-        
-        // 2. Verificar cuando se carga el modelo 3D
-        alfilModel.addEventListener('model-loaded', () => {
-            status1.innerHTML = '✅ ✅ Modelo 3D CARGADO CORRECTAMENTE';
-            status1.className = 'status success';
-            
-            // Ocultar diagnóstico después de 2 segundos
-            setTimeout(() => {
-                diagnostic.style.display = 'none';
-            }, 2000);
-        });
-        
-        alfilModel.addEventListener('model-error', (e) => {
-            status1.innerHTML = '❌ ERROR: El archivo GLB está corrupto o es inválido';
-            status1.className = 'status error';
-            console.error('Error detallado:', e.detail);
-        });
-        
-        // 3. Verificar marcador
         const marker = document.getElementById('marker');
+        const instructions = document.querySelector('.instructions');
+        
+        // Verificar carga del modelo
+        const model = document.querySelector('[gltf-model]');
+        
+        model.addEventListener('model-loaded', () => {
+            console.log('✅ ✅ NUEVO MODELO CARGADO EXITOSAMENTE');
+            instructions.innerHTML = '<h3>🎉 ¡Nuevo modelo cargado!</h3><p>Archivo corregido detectado</p>';
+        });
+        
+        model.addEventListener('model-error', (e) => {
+            console.error('❌ Error cargando nuevo modelo:', e);
+            instructions.innerHTML = '<h3>❌ Error con nuevo archivo</h3><p>Verifica el nombre exacto</p>';
+        });
+        
         marker.addEventListener('markerFound', () => {
-            status2.innerHTML = '✅ Marcador DETECTADO';
-            status2.className = 'status success';
+            instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            status2.innerHTML = '🎯 Buscando marcador...';
-            status2.className = 'status loading';
+            instructions.innerHTML = '<h3>♟️ ALFIL - NUEVO MODELO</h3><p>Apunta al marcador</p>';
+            instructions.style.background = 'rgba(0,0,0,0.8)';
         });
-        
-        // 4. Probar diferentes escalas automáticamente
-        setTimeout(() => {
-            const scales = [0.1, 0.2, 0.3, 0.5, 1.0];
-            let currentScale = 0;
-            
-            const tryNextScale = () => {
-                if (currentScale < scales.length) {
-                    alfilModel.setAttribute('scale', 
-                        `${scales[currentScale]} ${scales[currentScale]} ${scales[currentScale]}`);
-                    console.log(`Probando escala: ${scales[currentScale]}`);
-                    currentScale++;
-                    setTimeout(tryNextScale, 1000);
-                }
-            };
-            
-            tryNextScale();
-        }, 3000);
-        
-        console.log('🔍 Iniciando diagnóstico completo...');
+
+        console.log('🔄 Probando con archivo corregido...');
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
