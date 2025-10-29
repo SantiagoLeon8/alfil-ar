@@ -49,7 +49,7 @@
 <body>
     <div class="instructions">
         <h3>♟️ ALFIL MATEMÁTICO - AR</h3>
-        <p>Colores: Rojo, Azul, Verde, Amarillo</p>
+        <p>Piezas unidas y tamaño aumentado</p>
     </div>
 
     <div class="marker-image">
@@ -65,18 +65,18 @@
 
         <!-- LUZ AMBIENTAL MUY FUERTE -->
         <a-entity light="type: ambient; color: #FFFFFF; intensity: 3.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.5" position="2 10 5"></a-entity>
-        <a-entity light="type: point; color: #FFFFFF; intensity: 2.0" position="0 5 3"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 4.0" position="3 12 6"></a-entity>
+        <a-entity light="type: point; color: #FFFFFF; intensity: 2.5" position="0 8 4"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- ARCHIVO COMPLETO CON COLORES CORRECTOS -->
+            <!-- ARCHIVO COMPLETO - ESCALA GRANDE -->
             <a-entity 
                 gltf-model="alfil_colores_matlab_glb_correcto.glb"
-                scale="1.0 1.0 1.0"
-                position="0 0.08 0"
+                scale="3.0 3.0 3.0"
+                position="0 0.3 0"
                 rotation="0 0 0">
             </a-entity>
         </a-marker>
@@ -89,29 +89,9 @@
         const instructions = document.querySelector('.instructions');
         const alfil = document.querySelector('[gltf-model]');
         
-        // Verificar carga y ajustar si es necesario
         alfil.addEventListener('model-loaded', () => {
-            console.log('✅ Modelo completo cargado - 15cm de altura');
-            instructions.innerHTML = '<h3>🎉 ¡Alfil matemático!</h3><p>15cm - Colores correctos</p>';
-            
-            // Probar diferentes escalas si es muy pequeño
-            setTimeout(() => {
-                const scales = [1.0, 1.5, 2.0, 2.5];
-                let currentScale = 0;
-                
-                const tryScale = () => {
-                    if (currentScale < scales.length) {
-                        alfil.setAttribute('scale', 
-                            `${scales[currentScale]} ${scales[currentScale]} ${scales[currentScale]}`);
-                        console.log(`Escala probada: ${scales[currentScale]}`);
-                        currentScale++;
-                        if (currentScale < scales.length) {
-                            setTimeout(tryScale, 1000);
-                        }
-                    }
-                };
-                tryScale();
-            }, 1000);
+            console.log('✅ Modelo cargado - Escala 3.0 (45cm)');
+            instructions.innerHTML = '<h3>🎉 ¡Alfil a 45cm!</h3><p>Piezas unidas - Tamaño aumentado</p>';
         });
         
         alfil.addEventListener('model-error', (e) => {
@@ -128,8 +108,9 @@
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎯 Cargando alfil con colores correctos...');
+        console.log('🎯 Cargando alfil unido a escala grande...');
     </script>
 </body>
 </html>
+
 
