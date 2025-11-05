@@ -74,30 +74,12 @@
             height: 50px;
             border: 1px solid #4285f4;
         }
-        .rotation-info {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.9);
-            color: #333;
-            padding: 8px 15px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 1000;
-            font-size: 14px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="instructions">
         <h3>♟️ ALFIL + CAMPO VECTORIAL</h3>
-        <p>Usa los botones para girar • Colores vibrantes</p>
-    </div>
-
-    <div class="rotation-info" id="rotationInfo">
-        Rotación: 0°
+        <p>Alfil DELANTE • Vectores DETRÁS</p>
     </div>
 
     <div class="controls">
@@ -129,85 +111,85 @@
             <!-- CONTENEDOR PRINCIPAL QUE GIRA -->
             <a-entity id="sceneContainer" rotation="0 0 0">
                 
-                <!-- ========== CAJA VOLUMÉTRICA ROJA ========== -->
+                <!-- ========== ALFIL GRANDE (PRIMERO - DELANTE) ========== -->
+                <a-entity 
+                    gltf-model="alfil_unido_final.glb"
+                    scale="2.8 2.8 2.8"
+                    position="0 0.3 0.5"  <!-- MÁS ADELANTE (z positivo) -->
+                    rotation="0 0 0">
+                </a-entity>
+
+                <!-- ========== CAJA VOLUMÉTRICA ROJA (DETRÁS DEL ALFIL) ========== -->
                 <a-box 
                     id="caja"
-                    position="0 0.8 0"
+                    position="0 0.8 0.2"  <!-- MÁS ATRÁS que el alfil -->
                     width="1.2"
                     height="1.6"
                     depth="1.2"
                     color="#FF0000"
-                    opacity="0.3"
+                    opacity="0.2"  <!-- MÁS TRANSPARENTE -->
                     transparent="true"
                     wireframe="false">
                 </a-box>
 
                 <!-- MARCO DE LA CAJA (ROJO BRILLANTE) -->
-                <a-box position="0 0.8 0" width="1.2" height="0.1" depth="0.1" color="#FF4444"></a-box>
-                <a-box position="0 0.8 0" width="0.1" height="1.6" depth="0.1" color="#FF4444"></a-box>
-                <a-box position="0 0.8 0" width="0.1" height="0.1" depth="1.2" color="#FF4444"></a-box>
+                <a-box position="0 0.8 0.2" width="1.2" height="0.1" depth="0.1" color="#FF4444"></a-box>
+                <a-box position="0 0.8 0.2" width="0.1" height="1.6" depth="0.1" color="#FF4444"></a-box>
+                <a-box position="0 0.8 0.2" width="0.1" height="0.1" depth="1.2" color="#FF4444"></a-box>
 
-                <!-- ========== ALFIL GRANDE ========== -->
-                <a-entity 
-                    gltf-model="alfil_unido_final.glb"
-                    scale="2.5 2.5 2.5"
-                    position="0 0.3 0"
-                    rotation="0 0 0">
-                </a-entity>
-
-                <!-- ========== CAMPO VECTORIAL COLORIDO ========== -->
+                <!-- ========== CAMPO VECTORIAL (MUY ATRÁS) ========== -->
                 
-                <!-- VECTORES ROJOS (abajo) -->
-                <a-entity position="-0.4 0.1 -0.6">
+                <!-- VECTORES ROJOS (abajo) - MUY ATRÁS -->
+                <a-entity position="-0.4 0.1 -0.8">  <!-- z NEGATIVO (atrás) -->
                     <a-cylinder color="#FF0000" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#FF0000" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
-                <a-entity position="0 0.1 -0.6">
+                <a-entity position="0 0.1 -0.8">
                     <a-cylinder color="#FF0000" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#FF0000" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
-                <a-entity position="0.4 0.1 -0.6">
+                <a-entity position="0.4 0.1 -0.8">
                     <a-cylinder color="#FF0000" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#FF0000" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
 
-                <!-- VECTORES VERDES (medio) -->
-                <a-entity position="-0.4 0.8 -0.6" rotation="30 0 0">
+                <!-- VECTORES VERDES (medio) - ATRÁS -->
+                <a-entity position="-0.4 0.8 -0.8" rotation="30 0 0">
                     <a-cylinder color="#00FF00" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#00FF00" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
-                <a-entity position="0 0.8 -0.6" rotation="30 0 0">
+                <a-entity position="0 0.8 -0.8" rotation="30 0 0">
                     <a-cylinder color="#00FF00" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#00FF00" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
-                <a-entity position="0.4 0.8 -0.6" rotation="30 0 0">
+                <a-entity position="0.4 0.8 -0.8" rotation="30 0 0">
                     <a-cylinder color="#00FF00" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#00FF00" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
 
-                <!-- VECTORES AZULES (arriba) -->
-                <a-entity position="-0.4 1.4 -0.6" rotation="60 0 0">
+                <!-- VECTORES AZULES (arriba) - ATRÁS -->
+                <a-entity position="-0.4 1.4 -0.8" rotation="60 0 0">
                     <a-cylinder color="#0000FF" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#0000FF" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
-                <a-entity position="0 1.4 -0.6" rotation="60 0 0">
+                <a-entity position="0 1.4 -0.8" rotation="60 0 0">
                     <a-cylinder color="#0000FF" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#0000FF" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
-                <a-entity position="0.4 1.4 -0.6" rotation="60 0 0">
+                <a-entity position="0.4 1.4 -0.8" rotation="60 0 0">
                     <a-cylinder color="#0000FF" height="0.2" radius="0.03"></a-cylinder>
                     <a-cone color="#0000FF" radius-bottom="0.06" radius-top="0.0" height="0.1" position="0 0.15 0"></a-cone>
                 </a-entity>
 
-                <!-- LÍNEAS DE FLUJO AMARILLAS -->
-                <a-entity line="color: #FFFF00; opacity: 0.8" 
-                    path="-0.6 0.1 -0.6, -0.4 0.5 -0.4, -0.2 0.9 -0.2, 0 1.3 0">
+                <!-- LÍNEAS DE FLUJO AMARILLAS - ATRÁS -->
+                <a-entity line="color: #FFFF00; opacity: 0.6" 
+                    path="-0.6 0.1 -0.8, -0.4 0.5 -0.6, -0.2 0.9 -0.4, 0 1.3 -0.2">
                 </a-entity>
-                <a-entity line="color: #FFFF00; opacity: 0.8" 
-                    path="0 0.1 -0.6, 0 0.5 -0.4, 0 0.9 -0.2, 0 1.3 0">
+                <a-entity line="color: #FFFF00; opacity: 0.6" 
+                    path="0 0.1 -0.8, 0 0.5 -0.6, 0 0.9 -0.4, 0 1.3 -0.2">
                 </a-entity>
-                <a-entity line="color: #FFFF00; opacity: 0.8" 
-                    path="0.6 0.1 -0.6, 0.4 0.5 -0.4, 0.2 0.9 -0.2, 0 1.3 0">
+                <a-entity line="color: #FFFF00; opacity: 0.6" 
+                    path="0.6 0.1 -0.8, 0.4 0.5 -0.6, 0.2 0.9 -0.4, 0 1.3 -0.2">
                 </a-entity>
 
             </a-entity>
@@ -220,7 +202,6 @@
     <script>
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
-        const rotationInfo = document.getElementById('rotationInfo');
         const sceneContainer = document.getElementById('sceneContainer');
         
         let currentRotation = 0;
@@ -228,17 +209,12 @@
         // Función para girar la escena
         function rotateScene(direction) {
             if (direction === 'left') {
-                currentRotation += 45; // Girar 45° a la izquierda
+                currentRotation += 45;
             } else if (direction === 'right') {
-                currentRotation -= 45; // Girar 45° a la derecha
+                currentRotation -= 45;
             }
             
-            // Aplicar rotación suave
             sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
-            
-            // Actualizar información de rotación
-            updateRotationInfo();
-            
             console.log(`↻ Rotación: ${currentRotation}°`);
         }
         
@@ -246,31 +222,8 @@
         function resetRotation() {
             currentRotation = 0;
             sceneContainer.setAttribute('rotation', '0 0 0');
-            updateRotationInfo();
-            console.log('🔄 Rotación reiniciada a 0°');
+            console.log('🔄 Rotación reiniciada');
         }
-        
-        // Actualizar el texto de información de rotación
-        function updateRotationInfo() {
-            let normalizedRotation = ((currentRotation % 360) + 360) % 360;
-            rotationInfo.textContent = `Rotación: ${normalizedRotation}°`;
-            
-            // Cambiar color según el ángulo
-            const hue = (normalizedRotation % 360);
-            rotationInfo.style.background = `hsl(${hue}, 70%, 90%)`;
-            rotationInfo.style.color = `hsl(${hue}, 70%, 30%)`;
-        }
-        
-        // Rotación automática opcional (descomenta si la quieres)
-        /*
-        function autoRotate() {
-            currentRotation += 0.5;
-            sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
-            updateRotationInfo();
-            requestAnimationFrame(autoRotate);
-        }
-        autoRotate();
-        */
         
         // Rotación con gestos táctiles
         let isRotating = false;
@@ -288,7 +241,6 @@
                 const deltaX = e.touches[0].clientX - lastTouchX;
                 currentRotation += deltaX * 0.5;
                 sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
-                updateRotationInfo();
                 lastTouchX = e.touches[0].clientX;
             }
         });
@@ -298,7 +250,7 @@
         });
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎯 ¡TODO VISIBLE!</h3><p>Usa botones o desliza para girar</p>';
+            instructions.innerHTML = '<h3>🎯 ALFIL DELANTE • VECTORES DETRÁS</h3><p>Gira para ver desde todos los ángulos</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
@@ -307,10 +259,7 @@
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        // Inicializar información de rotación
-        updateRotationInfo();
-        
-        console.log('🎮 Controles de rotación activados');
+        console.log('🎮 Alfil DELANTE - Vectores DETRÁS');
     </script>
 </body>
 </html>
