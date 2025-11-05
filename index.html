@@ -9,31 +9,48 @@
             padding: 0;
             overflow: hidden;
             background: black;
-            font-family: Arial, sans-serif;
         }
-        .diagnostic {
+        .instructions {
             position: fixed;
-            top: 50%;
+            top: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.95);
-            color: #333;
-            padding: 20px;
-            border-radius: 15px;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
             z-index: 1000;
             width: 90%;
             max-width: 400px;
         }
-        .status {
-            margin: 10px 0;
+        .controls {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
             padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
         }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .loading { background: #fff3cd; color: #856404; }
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-rotate {
+            background: #34a853;
+        }
+        .btn-reset {
+            background: #ea4335;
+        }
         .marker-image {
             position: fixed;
             bottom: 15px;
@@ -50,38 +67,22 @@
             height: 50px;
             border: 1px solid #4285f4;
         }
+        .marker-image p {
+            margin: 3px 0;
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="diagnostic" id="diagnostic">
-        <h2>🔍 DIAGNÓSTICO COMPLETO</h2>
-        
-        <div id="status1" class="status loading">
-            📦 Verificando archivo GLB...
-        </div>
-        
-        <div id="status2" class="status loading">
-            📱 Verificando cámara...
-        </div>
-        
-        <div id="status3" class="status loading">
-            🎯 Verificando marcador...
-        </div>
-        
-        <div id="fileInfo" class="status">
-            📄 Archivo: alfil_unido_final.glb
-        </div>
-        
-        <div style="margin-top: 15px;">
-            <button onclick="location.reload()" style="
-                background: #4285f4;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 8px;
-                cursor: pointer;
-            ">🔄 Recargar</button>
-        </div>
+    <div class="instructions">
+        <h3>♟️ ALFIL INTERACTIVO - AR</h3>
+        <p>Usa los botones para rotar el alfil</p>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-rotate" onclick="rotateAlfil('left')">↶ Girar Izquierda</button>
+        <button class="btn btn-rotate" onclick="rotateAlfil('right')">↷ Girar Derecha</button>
+        <button class="btn btn-reset" onclick="resetRotation()">🔄 Reiniciar</button>
     </div>
 
     <div class="marker-image">
@@ -92,10 +93,10 @@
     <a-scene 
         vr-mode-ui="enabled: false"
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono; maxDetectionRate: 30;"
-        renderer="colorManagement: true;"
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
+        renderer="colorManagement: true;">
 
-        <!-- LUZ MUY FUERTE -->
+        <!-- LUZ -->
         <a-entity light="type: ambient; color: #FFFFFF; intensity: 3.0"></a-entity>
         <a-entity light="type: directional; color: #FFFFFF; intensity: 4.0" position="0 10 5"></a-entity>
 
@@ -103,7 +104,7 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- SOLO EL ALFIL - MUY SIMPLE -->
+            <!-- ALFIL CON ROTACIÓN INTERACTIVA -->
             <a-entity 
                 id="alfil"
                 gltf-model="alfil_unido_final.glb"
@@ -118,96 +119,82 @@
     </a-scene>
 
     <script>
-        const diagnostic = document.getElementById('diagnostic');
-        const status1 = document.getElementById('status1');
-        const status2 = document.getElementById('status2');
-        const status3 = document.getElementById('status3');
+        const marker = document.getElementById('marker');
+        const instructions = document.querySelector('.instructions');
         const alfil = document.getElementById('alfil');
         
-        console.log('🔍 Iniciando diagnóstico...');
-
-        // 1. Verificar si el archivo GLB existe
-        fetch('alfil_unido_final.glb')
-            .then(response => {
-                if (response.ok) {
-                    status1.innerHTML = '✅ Archivo alfil_unido_final.glb ENCONTRADO';
-                    status1.className = 'status success';
-                    console.log('✅ Archivo encontrado');
-                } else {
-                    status1.innerHTML = '❌ ERROR: alfil_unido_final.glb NO existe';
-                    status1.className = 'status error';
-                    console.error('❌ Archivo no encontrado');
-                }
-            })
-            .catch(error => {
-                status1.innerHTML = '❌ ERROR de red al cargar archivo';
-                status1.className = 'status error';
-                console.error('❌ Error de red:', error);
-            });
-
-        // 2. Verificar carga del modelo 3D
+        let currentRotation = 0;
+        
+        // Función para rotar el alfil
+        function rotateAlfil(direction) {
+            if (direction === 'left') {
+                currentRotation += 45; // Girar 45° a la izquierda
+            } else if (direction === 'right') {
+                currentRotation -= 45; // Girar 45° a la derecha
+            }
+            
+            // Aplicar rotación suave
+            alfil.setAttribute('rotation', `0 ${currentRotation} 0`);
+            
+            console.log(`↻ Rotación actual: ${currentRotation}°`);
+        }
+        
+        // Función para reiniciar rotación
+        function resetRotation() {
+            currentRotation = 0;
+            alfil.setAttribute('rotation', '0 0 0');
+            console.log('🔄 Rotación reiniciada');
+        }
+        
+        // Rotación automática opcional (descomenta si la quieres)
+        /*
+        function autoRotate() {
+            currentRotation += 0.5;
+            alfil.setAttribute('rotation', `0 ${currentRotation} 0`);
+            requestAnimationFrame(autoRotate);
+        }
+        autoRotate();
+        */
+        
         alfil.addEventListener('model-loaded', () => {
-            status1.innerHTML = '✅ ✅ Modelo 3D CARGADO CORRECTAMENTE';
-            status1.className = 'status success';
-            console.log('✅ Modelo 3D cargado');
-            
-            // Ocultar diagnóstico después de 3 segundos
-            setTimeout(() => {
-                diagnostic.style.display = 'none';
-            }, 3000);
+            console.log('✅ Alfil cargado - Rotación activa');
+            instructions.innerHTML = '<h3>🎉 ¡Alfil listo!</h3><p>Usa los botones para rotar</p>';
         });
-
-        alfil.addEventListener('model-error', (e) => {
-            status1.innerHTML = '❌ ERROR: Archivo GLB corrupto o inválido';
-            status1.className = 'status error';
-            console.error('❌ Error cargando modelo:', e.detail);
-        });
-
-        // 3. Verificar cámara
-        setTimeout(() => {
-            status2.innerHTML = '✅ Cámara ACTIVADA';
-            status2.className = 'status success';
-            console.log('✅ Cámara activada');
-        }, 2000);
-
-        // 4. Verificar marcador
-        const marker = document.getElementById('marker');
+        
         marker.addEventListener('markerFound', () => {
-            status3.innerHTML = '✅ Marcador DETECTADO';
-            status3.className = 'status success';
-            console.log('✅ Marcador detectado');
+            instructions.style.background = 'rgba(0,150,0,0.8)';
         });
-
+        
         marker.addEventListener('markerLost', () => {
-            status3.innerHTML = '🎯 Buscando marcador...';
-            status3.className = 'status loading';
+            instructions.innerHTML = '<h3>♟️ ALFIL INTERACTIVO - AR</h3><p>Apunta al marcador</p>';
+            instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        // 5. Verificar errores generales de A-Frame
-        document.querySelector('a-scene').addEventListener('loaded', () => {
-            console.log('✅ Escena A-Frame cargada');
+        // Rotación con gestos táctiles (opcional)
+        let isRotating = false;
+        let lastTouchX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isRotating = true;
+                lastTouchX = e.touches[0].clientX;
+            }
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (isRotating && e.touches.length === 1) {
+                const deltaX = e.touches[0].clientX - lastTouchX;
+                currentRotation += deltaX * 0.5;
+                alfil.setAttribute('rotation', `0 ${currentRotation} 0`);
+                lastTouchX = e.touches[0].clientX;
+            }
+        });
+        
+        document.addEventListener('touchend', () => {
+            isRotating = false;
         });
 
-        // 6. Probar diferentes escalas si no se ve
-        setTimeout(() => {
-            const scales = [1.0, 2.0, 3.0, 4.0, 5.0];
-            let currentScale = 0;
-            
-            const tryScale = () => {
-                if (currentScale < scales.length) {
-                    alfil.setAttribute('scale', 
-                        `${scales[currentScale]} ${scales[currentScale]} ${scales[currentScale]}`);
-                    console.log(`🔧 Probando escala: ${scales[currentScale]}`);
-                    currentScale++;
-                    if (currentScale < scales.length) {
-                        setTimeout(tryScale, 1500);
-                    }
-                }
-            };
-            
-            tryScale();
-        }, 4000);
-
+        console.log('🎮 Controles de rotación activados');
     </script>
 </body>
 </html>
