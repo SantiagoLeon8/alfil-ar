@@ -24,6 +24,40 @@
             width: 90%;
             max-width: 400px;
         }
+        .controls {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            margin: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            min-width: 100px;
+        }
+        .btn-left {
+            background: #34a853;
+        }
+        .btn-right {
+            background: #ea4335;
+        }
+        .btn-reset {
+            background: #fbbc05;
+            color: #333;
+        }
         .marker-image {
             position: fixed;
             bottom: 15px;
@@ -40,12 +74,36 @@
             height: 50px;
             border: 1px solid #4285f4;
         }
+        .rotation-info {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 1000;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="instructions">
         <h3>♟️ ALFIL + CAMPO VECTORIAL</h3>
-        <p>Todo visible con colores vibrantes</p>
+        <p>Usa los botones para girar • Colores vibrantes</p>
+    </div>
+
+    <div class="rotation-info" id="rotationInfo">
+        Rotación: 0°
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-left" onclick="rotateScene('left')">↶ Girar Izquierda</button>
+        <button class="btn btn-right" onclick="rotateScene('right')">↷ Girar Derecha</button>
+        <button class="btn btn-reset" onclick="resetRotation()">🔄 Reiniciar</button>
     </div>
 
     <div class="marker-image">
@@ -68,10 +126,10 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- CONTENEDOR PRINCIPAL -->
+            <!-- CONTENEDOR PRINCIPAL QUE GIRA -->
             <a-entity id="sceneContainer" rotation="0 0 0">
                 
-                <!-- ========== CAJA VOLUMÉTRICA ROJA (MUY VISIBLE) ========== -->
+                <!-- ========== CAJA VOLUMÉTRICA ROJA ========== -->
                 <a-box 
                     id="caja"
                     position="0 0.8 0"
@@ -162,13 +220,62 @@
     <script>
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
+        const rotationInfo = document.getElementById('rotationInfo');
         const sceneContainer = document.getElementById('sceneContainer');
         
         let currentRotation = 0;
+        
+        // Función para girar la escena
+        function rotateScene(direction) {
+            if (direction === 'left') {
+                currentRotation += 45; // Girar 45° a la izquierda
+            } else if (direction === 'right') {
+                currentRotation -= 45; // Girar 45° a la derecha
+            }
+            
+            // Aplicar rotación suave
+            sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
+            
+            // Actualizar información de rotación
+            updateRotationInfo();
+            
+            console.log(`↻ Rotación: ${currentRotation}°`);
+        }
+        
+        // Función para reiniciar rotación
+        function resetRotation() {
+            currentRotation = 0;
+            sceneContainer.setAttribute('rotation', '0 0 0');
+            updateRotationInfo();
+            console.log('🔄 Rotación reiniciada a 0°');
+        }
+        
+        // Actualizar el texto de información de rotación
+        function updateRotationInfo() {
+            let normalizedRotation = ((currentRotation % 360) + 360) % 360;
+            rotationInfo.textContent = `Rotación: ${normalizedRotation}°`;
+            
+            // Cambiar color según el ángulo
+            const hue = (normalizedRotation % 360);
+            rotationInfo.style.background = `hsl(${hue}, 70%, 90%)`;
+            rotationInfo.style.color = `hsl(${hue}, 70%, 30%)`;
+        }
+        
+        // Rotación automática opcional (descomenta si la quieres)
+        /*
+        function autoRotate() {
+            currentRotation += 0.5;
+            sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
+            updateRotationInfo();
+            requestAnimationFrame(autoRotate);
+        }
+        autoRotate();
+        */
+        
+        // Rotación con gestos táctiles
         let isRotating = false;
         let lastTouchX = 0;
         
-        // Rotación con gestos táctiles
         document.addEventListener('touchstart', (e) => {
             if (e.touches.length === 1) {
                 isRotating = true;
@@ -181,6 +288,7 @@
                 const deltaX = e.touches[0].clientX - lastTouchX;
                 currentRotation += deltaX * 0.5;
                 sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
+                updateRotationInfo();
                 lastTouchX = e.touches[0].clientX;
             }
         });
@@ -190,7 +298,7 @@
         });
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎯 ¡TODO VISIBLE!</h3><p>Desliza para rotar • Rojo + Verde + Azul</p>';
+            instructions.innerHTML = '<h3>🎯 ¡TODO VISIBLE!</h3><p>Usa botones o desliza para girar</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
@@ -199,7 +307,10 @@
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎨 Código simple cargado - Colores vibrantes');
+        // Inicializar información de rotación
+        updateRotationInfo();
+        
+        console.log('🎮 Controles de rotación activados');
     </script>
 </body>
 </html>
