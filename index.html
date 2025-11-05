@@ -48,6 +48,12 @@
             font-weight: bold;
             min-width: 100px;
         }
+        .btn-left {
+            background: #34a853;
+        }
+        .btn-right {
+            background: #ea4335;
+        }
         .marker-image {
             position: fixed;
             bottom: 15px;
@@ -68,13 +74,13 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL + CAMPO VECTORIAL</h3>
-        <p>Sin cubos blancos - Solo elementos visibles</p>
+        <h3>♟️ ALFIL + CAJA AZUL + CAMPO VECTORIAL</h3>
+        <p>Sin líneas amarillas - Todo visible</p>
     </div>
 
     <div class="controls">
-        <button class="btn" onclick="rotateScene('left')">↶ Girar Izquierda</button>
-        <button class="btn" onclick="rotateScene('right')">↷ Girar Derecha</button>
+        <button class="btn btn-left" onclick="rotateScene('left')">↶ Girar Izquierda</button>
+        <button class="btn btn-right" onclick="rotateScene('right')">↷ Girar Derecha</button>
     </div>
 
     <div class="marker-image">
@@ -88,18 +94,36 @@
         arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
         renderer="colorManagement: true;">
 
-        <!-- SOLO LUCES ESENCIALES -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 3.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 4.0" position="0 10 5"></a-entity>
+        <!-- LUCES MUY FUERTES -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 4.0"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 5.0" position="0 20 10"></a-entity>
+        <a-entity light="type: point; color: #FFFFFF; intensity: 6.0" position="0 10 5"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- CONTENEDOR PRINCIPAL - SOLO ELEMENTOS VISIBLES -->
+            <!-- CONTENEDOR PRINCIPAL QUE GIRA -->
             <a-entity id="sceneContainer" rotation="0 0 0">
                 
-                <!-- ========== SOLO ALFIL ========== -->
+                <!-- ========== CAJA AZUL TRANSPARENTE ========== -->
+                <a-box 
+                    position="0 0.8 0"
+                    width="1.2"
+                    height="1.6"
+                    depth="1.2"
+                    color="#0066FF"
+                    opacity="0.1"   <!-- MUY TRANSPARENTE -->
+                    transparent="true"
+                    wireframe="false">
+                </a-box>
+
+                <!-- MARCO DE LA CAJA AZUL (solo bordes) -->
+                <a-box position="0 0.8 0" width="1.2" height="0.02" depth="0.02" color="#0088FF" opacity="0.6"></a-box>
+                <a-box position="0 0.8 0" width="0.02" height="1.6" depth="0.02" color="#0088FF" opacity="0.6"></a-box>
+                <a-box position="0 0.8 0" width="0.02" height="0.02" depth="1.2" color="#0088FF" opacity="0.6"></a-box>
+
+                <!-- ========== ALFIL PRINCIPAL ========== -->
                 <a-entity 
                     gltf-model="alfil_unido_final.glb"
                     scale="3.0 3.0 3.0"
@@ -107,20 +131,37 @@
                     rotation="0 180 0">
                 </a-entity>
 
-                <!-- ========== SOLO 3 VECTORES SIMPLES ========== -->
-                <a-entity position="0.5 0.5 0.5" rotation="0 0 0">
-                    <a-cylinder color="#FF0000" height="0.2" radius="0.02" opacity="0.6"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.04" radius-top="0.0" height="0.1" position="0 0.15 0" opacity="0.6"></a-cone>
+                <!-- ========== CAMPO VECTORIAL SIMPLE ========== -->
+                
+                <!-- Solo 6 vectores estratégicos (no 9) -->
+                <a-entity position="-0.4 0.2 0.4" rotation="0 0 0">
+                    <a-cylinder color="#FF0000" height="0.12" radius="0.012" opacity="0.5"></a-cylinder>
+                    <a-cone color="#FF0000" radius-bottom="0.025" radius-top="0.0" height="0.06" position="0 0.09 0" opacity="0.5"></a-cone>
+                </a-entity>
+                
+                <a-entity position="0.4 0.2 0.4" rotation="0 0 0">
+                    <a-cylinder color="#FF0000" height="0.12" radius="0.012" opacity="0.5"></a-cylinder>
+                    <a-cone color="#FF0000" radius-bottom="0.025" radius-top="0.0" height="0.06" position="0 0.09 0" opacity="0.5"></a-cone>
                 </a-entity>
 
-                <a-entity position="-0.5 1.0 0.5" rotation="30 0 0">
-                    <a-cylinder color="#00FF00" height="0.2" radius="0.02" opacity="0.6"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.04" radius-top="0.0" height="0.1" position="0 0.15 0" opacity="0.6"></a-cone>
+                <a-entity position="-0.4 0.8 0.4" rotation="25 0 0">
+                    <a-cylinder color="#00FF00" height="0.12" radius="0.012" opacity="0.5"></a-cylinder>
+                    <a-cone color="#00FF00" radius-bottom="0.025" radius-top="0.0" height="0.06" position="0 0.09 0" opacity="0.5"></a-cone>
+                </a-entity>
+                
+                <a-entity position="0.4 0.8 0.4" rotation="25 0 0">
+                    <a-cylinder color="#00FF00" height="0.12" radius="0.012" opacity="0.5"></a-cylinder>
+                    <a-cone color="#00FF00" radius-bottom="0.025" radius-top="0.0" height="0.06" position="0 0.09 0" opacity="0.5"></a-cone>
                 </a-entity>
 
-                <a-entity position="0.5 1.5 0.5" rotation="60 0 0">
-                    <a-cylinder color="#0000FF" height="0.2" radius="0.02" opacity="0.6"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.04" radius-top="0.0" height="0.1" position="0 0.15 0" opacity="0.6"></a-cone>
+                <a-entity position="-0.4 1.4 0.4" rotation="45 0 0">
+                    <a-cylinder color="#0000FF" height="0.12" radius="0.012" opacity="0.5"></a-cylinder>
+                    <a-cone color="#0000FF" radius-bottom="0.025" radius-top="0.0" height="0.06" position="0 0.09 0" opacity="0.5"></a-cone>
+                </a-entity>
+                
+                <a-entity position="0.4 1.4 0.4" rotation="45 0 0">
+                    <a-cylinder color="#0000FF" height="0.12" radius="0.012" opacity="0.5"></a-cylinder>
+                    <a-cone color="#0000FF" radius-bottom="0.025" radius-top="0.0" height="0.06" position="0 0.09 0" opacity="0.5"></a-cone>
                 </a-entity>
 
             </a-entity>
@@ -137,6 +178,7 @@
         
         let currentRotation = 0;
         
+        // Función para girar la escena
         function rotateScene(direction) {
             if (direction === 'left') {
                 currentRotation += 45;
@@ -145,8 +187,10 @@
             }
             
             sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
+            console.log(`↻ Rotación: ${currentRotation}°`);
         }
         
+        // Rotación con gestos táctiles
         let isRotating = false;
         let lastTouchX = 0;
         
@@ -171,17 +215,16 @@
         });
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>✅ ¡SOLO ALFIL Y VECTORES!</h3><p>Sin cubos blancos</p>';
+            instructions.innerHTML = '<h3>🎯 ALFIL + CAJA AZUL + VECTORES</h3><p>Sin líneas amarillas - Todo visible</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL + CAMPO VECTORIAL</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL + CAJA AZUL + CAMPO VECTORIAL</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎯 Código limpio - Solo alfil y vectores');
+        console.log('🎮 Sin líneas amarillas - Solo elementos esenciales');
     </script>
 </body>
 </html>
-
