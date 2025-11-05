@@ -75,13 +75,13 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL INTERACTIVO - AR</h3>
-        <p>Usa los botones para rotar el alfil</p>
+        <h3>♟️ PROYECTO CÁLCULO - AR</h3>
+        <p>Alfil + Caja + Campo Vectorial - Rota con botones</p>
     </div>
 
     <div class="controls">
-        <button class="btn btn-rotate" onclick="rotateAlfil('left')">↶ Girar Izquierda</button>
-        <button class="btn btn-rotate" onclick="rotateAlfil('right')">↷ Girar Derecha</button>
+        <button class="btn btn-rotate" onclick="rotateScene('left')">↶ Girar Izquierda</button>
+        <button class="btn btn-rotate" onclick="rotateScene('right')">↷ Girar Derecha</button>
         <button class="btn btn-reset" onclick="resetRotation()">🔄 Reiniciar</button>
     </div>
 
@@ -104,13 +104,88 @@
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- ALFIL CON ROTACIÓN INTERACTIVA -->
-            <a-entity 
-                id="alfil"
-                gltf-model="alfil_unido_final.glb"
-                scale="3.0 3.0 3.0"
-                position="0 0.3 0"
-                rotation="0 0 0">
+            <!-- CONTENEDOR PRINCIPAL QUE ROTA TODO -->
+            <a-entity id="sceneContainer" rotation="0 0 0">
+                
+                <!-- CAJA TRANSPARENTE -->
+                <a-box 
+                    position="0 0.8 0"
+                    width="1.2"
+                    height="1.6"
+                    depth="1.2"
+                    color="#3498db"
+                    opacity="0.3"
+                    transparent="true"
+                    wireframe="true"
+                    wireframe-linewidth="3">
+                </a-box>
+
+                <!-- ALFIL DENTRO DE LA CAJA -->
+                <a-entity 
+                    gltf-model="alfil_unido_final.glb"
+                    scale="2.5 2.5 2.5"
+                    position="0 0.3 0"
+                    rotation="0 0 0">
+                </a-entity>
+
+                <!-- CAMPO VECTORIAL SIMPLIFICADO -->
+                <a-entity id="vectorField">
+                    <!-- Vectores alrededor - Fila inferior -->
+                    <a-entity position="-0.5 0.2 -0.5">
+                        <a-cylinder color="#e74c3c" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#e74c3c" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                    <a-entity position="0 0.2 -0.5">
+                        <a-cylinder color="#e74c3c" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#e74c3c" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                    <a-entity position="0.5 0.2 -0.5">
+                        <a-cylinder color="#e74c3c" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#e74c3c" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+
+                    <!-- Fila media -->
+                    <a-entity position="-0.5 0.8 -0.5">
+                        <a-cylinder color="#2ecc71" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#2ecc71" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                    <a-entity position="0 0.8 -0.5">
+                        <a-cylinder color="#2ecc71" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#2ecc71" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                    <a-entity position="0.5 0.8 -0.5">
+                        <a-cylinder color="#2ecc71" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#2ecc71" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+
+                    <!-- Fila superior -->
+                    <a-entity position="-0.5 1.4 -0.5">
+                        <a-cylinder color="#f39c12" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#f39c12" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                    <a-entity position="0 1.4 -0.5">
+                        <a-cylinder color="#f39c12" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#f39c12" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                    <a-entity position="0.5 1.4 -0.5">
+                        <a-cylinder color="#f39c12" height="0.2" radius="0.015" rotation="45 0 0"></a-cylinder>
+                        <a-cone color="#f39c12" radius-bottom="0.03" radius-top="0.0" height="0.1" position="0 0.15 0" rotation="45 0 0"></a-cone>
+                    </a-entity>
+                </a-entity>
+
+                <!-- LÍNEAS DE CAMPO -->
+                <a-entity>
+                    <a-entity line="color: #9b59b6" 
+                        path="-0.6 0.3 -0.6, -0.4 0.6 -0.4, -0.2 0.9 -0.2, 0 1.2 0">
+                    </a-entity>
+                    <a-entity line="color: #9b59b6" 
+                        path="0 0.3 -0.6, 0 0.6 -0.4, 0 0.9 -0.2, 0 1.2 0">
+                    </a-entity>
+                    <a-entity line="color: #9b59b6" 
+                        path="0.6 0.3 -0.6, 0.4 0.6 -0.4, 0.2 0.9 -0.2, 0 1.2 0">
+                    </a-entity>
+                </a-entity>
+
             </a-entity>
 
         </a-marker>
@@ -121,56 +196,62 @@
     <script>
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
-        const alfil = document.getElementById('alfil');
+        const sceneContainer = document.getElementById('sceneContainer');
+        const vectorField = document.getElementById('vectorField');
         
         let currentRotation = 0;
         
-        // Función para rotar el alfil
-        function rotateAlfil(direction) {
+        // Función para rotar toda la escena
+        function rotateScene(direction) {
             if (direction === 'left') {
-                currentRotation += 45; // Girar 45° a la izquierda
+                currentRotation += 45;
             } else if (direction === 'right') {
-                currentRotation -= 45; // Girar 45° a la derecha
+                currentRotation -= 45;
             }
             
-            // Aplicar rotación suave
-            alfil.setAttribute('rotation', `0 ${currentRotation} 0`);
+            // Rotar TODO el contenedor
+            sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
             
-            console.log(`↻ Rotación actual: ${currentRotation}°`);
+            console.log(`↻ Rotación completa: ${currentRotation}°`);
         }
         
         // Función para reiniciar rotación
         function resetRotation() {
             currentRotation = 0;
-            alfil.setAttribute('rotation', '0 0 0');
+            sceneContainer.setAttribute('rotation', '0 0 0');
             console.log('🔄 Rotación reiniciada');
         }
         
-        // Rotación automática opcional (descomenta si la quieres)
-        /*
-        function autoRotate() {
-            currentRotation += 0.5;
-            alfil.setAttribute('rotation', `0 ${currentRotation} 0`);
-            requestAnimationFrame(autoRotate);
+        // Animación suave del campo vectorial
+        function animateVectors() {
+            const vectors = vectorField.children;
+            vectors.forEach((vector, index) => {
+                const time = Date.now() * 0.001;
+                const wave = Math.sin(time + index * 0.5) * 0.05;
+                const currentPos = vector.getAttribute('position');
+                vector.setAttribute('position', {
+                    x: currentPos.x,
+                    y: currentPos.y + wave,
+                    z: currentPos.z
+                });
+            });
+            requestAnimationFrame(animateVectors);
         }
-        autoRotate();
-        */
-        
-        alfil.addEventListener('model-loaded', () => {
-            console.log('✅ Alfil cargado - Rotación activa');
-            instructions.innerHTML = '<h3>🎉 ¡Alfil listo!</h3><p>Usa los botones para rotar</p>';
-        });
         
         marker.addEventListener('markerFound', () => {
+            instructions.innerHTML = '<h3>🎓 PROYECTO DE CÁLCULO</h3><p>Rota con los botones ↓</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
+            
+            // Iniciar animación del campo vectorial
+            animateVectors();
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL INTERACTIVO - AR</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ PROYECTO CÁLCULO - AR</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        // Rotación con gestos táctiles (opcional)
+        // Rotación con gestos táctiles
         let isRotating = false;
         let lastTouchX = 0;
         
@@ -185,7 +266,7 @@
             if (isRotating && e.touches.length === 1) {
                 const deltaX = e.touches[0].clientX - lastTouchX;
                 currentRotation += deltaX * 0.5;
-                alfil.setAttribute('rotation', `0 ${currentRotation} 0`);
+                sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
                 lastTouchX = e.touches[0].clientX;
             }
         });
@@ -194,7 +275,7 @@
             isRotating = false;
         });
 
-        console.log('🎮 Controles de rotación activados');
+        console.log('🎮 Escena completa cargada - Todo rotable');
     </script>
 </body>
 </html>
