@@ -66,7 +66,7 @@
 <body>
     <div class="instructions">
         <h3>♟️ PROYECTO CÁLCULO - AR</h3>
-        <p>Caja + Alfil + Campo Vectorial</p>
+        <p>Escena AGRANDADA - Caja + Alfil + Campo Vectorial</p>
     </div>
 
     <div class="controls">
@@ -87,24 +87,24 @@
         renderer="colorManagement: true; antialias: true;">
 
         <!-- MÚLTIPLES LUCES PARA MEJOR VISIBILIDAD -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.0" position="2 10 5"></a-entity>
-        <a-entity light="type: point; color: #FFFFFF; intensity: 4.0" position="0 5 3"></a-entity>
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.5"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.5" position="2 15 8"></a-entity>
+        <a-entity light="type: point; color: #FFFFFF; intensity: 5.0" position="0 8 5"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- CONTENEDOR PRINCIPAL -->
-            <a-entity id="sceneContainer" rotation="0 0 0">
+            <!-- CONTENEDOR PRINCIPAL - ESCALA AGRANDADA -->
+            <a-entity id="sceneContainer" rotation="0 0 0" scale="1.3 1.3 1.3">
                 
-                <!-- CAJA VISIBLE Y GRANDE -->
+                <!-- CAJA MÁS GRANDE -->
                 <a-box 
                     id="caja"
-                    position="0 0.8 0"
-                    width="1.5"
-                    height="2.0"
-                    depth="1.5"
+                    position="0 1.0 0"
+                    width="2.0"
+                    height="2.5"
+                    depth="2.0"
                     color="#2980b9"
                     opacity="0.2"
                     transparent="true"
@@ -116,82 +116,82 @@
                 <a-entity id="marcoCaja">
                     <!-- Líneas del marco -->
                     <a-entity line="color: #3498db; opacity: 0.8" 
-                              path="-0.75 0 -0.75, -0.75 2.0 -0.75, 0.75 2.0 -0.75, 0.75 0 -0.75, -0.75 0 -0.75">
+                              path="-1.0 0 -1.0, -1.0 2.5 -1.0, 1.0 2.5 -1.0, 1.0 0 -1.0, -1.0 0 -1.0">
                     </a-entity>
                     <a-entity line="color: #3498db; opacity: 0.8" 
-                              path="-0.75 0 0.75, -0.75 2.0 0.75, 0.75 2.0 0.75, 0.75 0 0.75, -0.75 0 0.75">
+                              path="-1.0 0 1.0, -1.0 2.5 1.0, 1.0 2.5 1.0, 1.0 0 1.0, -1.0 0 1.0">
                     </a-entity>
                     <a-entity line="color: #3498db; opacity: 0.8" 
-                              path="-0.75 0 -0.75, -0.75 0 0.75">
+                              path="-1.0 0 -1.0, -1.0 0 1.0">
                     </a-entity>
                     <a-entity line="color: #3498db; opacity: 0.8" 
-                              path="0.75 0 -0.75, 0.75 0 0.75">
+                              path="1.0 0 -1.0, 1.0 0 1.0">
                     </a-entity>
                     <a-entity line="color: #3498db; opacity: 0.8" 
-                              path="-0.75 2.0 -0.75, -0.75 2.0 0.75">
+                              path="-1.0 2.5 -1.0, -1.0 2.5 1.0">
                     </a-entity>
                     <a-entity line="color: #3498db; opacity: 0.8" 
-                              path="0.75 2.0 -0.75, 0.75 2.0 0.75">
+                              path="1.0 2.5 -1.0, 1.0 2.5 1.0">
                     </a-entity>
                 </a-entity>
 
-                <!-- ALFIL DENTRO DE LA CAJA -->
+                <!-- ALFIL MÁS GRANDE -->
                 <a-entity 
                     id="alfil"
                     gltf-model="alfil_unido_final.glb"
-                    scale="2.0 2.0 2.0"
-                    position="0 0.4 0"
+                    scale="2.8 2.8 2.8"
+                    position="0 0.6 0"
                     rotation="0 0 0">
                 </a-entity>
 
-                <!-- CAMPO VECTORIAL SIMPLE Y VISIBLE -->
+                <!-- CAMPO VECTORIAL MÁS GRANDE -->
                 <a-entity id="campoVectorial">
-                    <!-- Vectores frontales (más grandes y visibles) -->
-                    <a-entity position="-0.6 0.5 -0.8" rotation="0 0 0">
-                        <a-cylinder color="#e74c3c" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#e74c3c" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <!-- Vectores frontales (más grandes) -->
+                    <a-entity position="-0.8 0.6 -1.0" rotation="0 0 0">
+                        <a-cylinder color="#e74c3c" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#e74c3c" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                     
-                    <a-entity position="0 0.5 -0.8" rotation="0 0 0">
-                        <a-cylinder color="#e74c3c" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#e74c3c" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="0 0.6 -1.0" rotation="0 0 0">
+                        <a-cylinder color="#e74c3c" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#e74c3c" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                     
-                    <a-entity position="0.6 0.5 -0.8" rotation="0 0 0">
-                        <a-cylinder color="#e74c3c" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#e74c3c" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="0.8 0.6 -1.0" rotation="0 0 0">
+                        <a-cylinder color="#e74c3c" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#e74c3c" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
 
                     <!-- Vectores medios -->
-                    <a-entity position="-0.6 1.2 -0.8" rotation="30 0 0">
-                        <a-cylinder color="#2ecc71" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#2ecc71" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="-0.8 1.5 -1.0" rotation="30 0 0">
+                        <a-cylinder color="#2ecc71" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#2ecc71" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                     
-                    <a-entity position="0 1.2 -0.8" rotation="30 0 0">
-                        <a-cylinder color="#2ecc71" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#2ecc71" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="0 1.5 -1.0" rotation="30 0 0">
+                        <a-cylinder color="#2ecc71" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#2ecc71" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                     
-                    <a-entity position="0.6 1.2 -0.8" rotation="30 0 0">
-                        <a-cylinder color="#2ecc71" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#2ecc71" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="0.8 1.5 -1.0" rotation="30 0 0">
+                        <a-cylinder color="#2ecc71" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#2ecc71" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
 
                     <!-- Vectores superiores -->
-                    <a-entity position="-0.6 1.8 -0.8" rotation="60 0 0">
-                        <a-cylinder color="#f39c12" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#f39c12" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="-0.8 2.3 -1.0" rotation="60 0 0">
+                        <a-cylinder color="#f39c12" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#f39c12" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                     
-                    <a-entity position="0 1.8 -0.8" rotation="60 0 0">
-                        <a-cylinder color="#f39c12" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#f39c12" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="0 2.3 -1.0" rotation="60 0 0">
+                        <a-cylinder color="#f39c12" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#f39c12" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                     
-                    <a-entity position="0.6 1.8 -0.8" rotation="60 0 0">
-                        <a-cylinder color="#f39c12" height="0.3" radius="0.02"></a-cylinder>
-                        <a-cone color="#f39c12" radius-bottom="0.05" radius-top="0.0" height="0.15" position="0 0.225 0"></a-cone>
+                    <a-entity position="0.8 2.3 -1.0" rotation="60 0 0">
+                        <a-cylinder color="#f39c12" height="0.4" radius="0.025"></a-cylinder>
+                        <a-cone color="#f39c12" radius-bottom="0.06" radius-top="0.0" height="0.2" position="0 0.3 0"></a-cone>
                     </a-entity>
                 </a-entity>
 
@@ -224,14 +224,8 @@
         }
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎓 ESCENA COMPLETA</h3><p>Caja + Alfil + Vectores</p>';
+            instructions.innerHTML = '<h3>🎓 ESCENA AGRANDADA</h3><p>Todo más grande y visible</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
-            
-            // Verificar que todos los elementos estén visibles
-            console.log('✅ Marcador detectado');
-            console.log('📦 Caja:', document.getElementById('caja'));
-            console.log('♟️ Alfil:', document.getElementById('alfil'));
-            console.log('🧭 Campo vectorial:', document.getElementById('campoVectorial'));
         });
         
         marker.addEventListener('markerLost', () => {
@@ -239,12 +233,8 @@
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        // Verificar carga del alfil
-        document.getElementById('alfil').addEventListener('model-loaded', () => {
-            console.log('✅ Alfil cargado correctamente');
-        });
-
-        console.log('🚀 Escena cargada - Elementos 3D activados');
+        console.log('🚀 Escena AGRANDADA cargada');
     </script>
 </body>
 </html>
+
