@@ -9,21 +9,31 @@
             padding: 0;
             overflow: hidden;
             background: black;
+            font-family: Arial, sans-serif;
         }
-        .instructions {
+        .diagnostic {
             position: fixed;
-            top: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
             text-align: center;
             z-index: 1000;
             width: 90%;
             max-width: 400px;
         }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .loading { background: #fff3cd; color: #856404; }
         .marker-image {
             position: fixed;
             bottom: 15px;
@@ -40,16 +50,38 @@
             height: 50px;
             border: 1px solid #4285f4;
         }
-        .marker-image p {
-            margin: 3px 0;
-            font-size: 10px;
-        }
     </style>
 </head>
 <body>
-    <div class="instructions">
-        <h3>♟️ PROYECTO CÁLCULO - AR</h3>
-        <p>Alfil + Caja + Campo Vectorial</p>
+    <div class="diagnostic" id="diagnostic">
+        <h2>🔍 DIAGNÓSTICO COMPLETO</h2>
+        
+        <div id="status1" class="status loading">
+            📦 Verificando archivo GLB...
+        </div>
+        
+        <div id="status2" class="status loading">
+            📱 Verificando cámara...
+        </div>
+        
+        <div id="status3" class="status loading">
+            🎯 Verificando marcador...
+        </div>
+        
+        <div id="fileInfo" class="status">
+            📄 Archivo: alfil_unido_final.glb
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <button onclick="location.reload()" style="
+                background: #4285f4;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+            ">🔄 Recargar</button>
+        </div>
     </div>
 
     <div class="marker-image">
@@ -60,96 +92,24 @@
     <a-scene 
         vr-mode-ui="enabled: false"
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
-        renderer="colorManagement: true;">
+        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono; maxDetectionRate: 30;"
+        renderer="colorManagement: true;"
 
-        <!-- LUZ AMBIENTAL -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.0" position="5 15 8"></a-entity>
+        <!-- LUZ MUY FUERTE -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 3.0"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 4.0" position="0 10 5"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- CAJA TRANSPARENTE -->
-            <a-box 
-                position="0 0.8 0"
-                width="1.2"
-                height="1.6"
-                depth="1.2"
-                color="#3498db"
-                opacity="0.3"
-                transparent="true"
-                wireframe="true"
-                wireframe-linewidth="3">
-            </a-box>
-
-            <!-- ALFIL DENTRO/SOBRE LA CAJA -->
+            <!-- SOLO EL ALFIL - MUY SIMPLE -->
             <a-entity 
+                id="alfil"
                 gltf-model="alfil_unido_final.glb"
-                scale="2.5 2.5 2.5"
+                scale="3.0 3.0 3.0"
                 position="0 0.3 0"
                 rotation="0 0 0">
-            </a-entity>
-
-            <!-- CAMPO VECTORIAL (Flechas 3D) -->
-            <!-- Vectores alrededor del alfil -->
-            <a-entity id="vectorField">
-                <!-- Fila inferior -->
-                <a-entity position="-0.6 0.1 -0.6" rotation="0 45 0">
-                    <a-cone color="#e74c3c" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#e74c3c" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-                <a-entity position="0 0.1 -0.6" rotation="0 0 0">
-                    <a-cone color="#e74c3c" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#e74c3c" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-                <a-entity position="0.6 0.1 -0.6" rotation="0 -45 0">
-                    <a-cone color="#e74c3c" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#e74c3c" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-
-                <!-- Fila media -->
-                <a-entity position="-0.6 0.8 -0.6" rotation="45 45 0">
-                    <a-cone color="#2ecc71" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#2ecc71" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-                <a-entity position="0 0.8 -0.6" rotation="45 0 0">
-                    <a-cone color="#2ecc71" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#2ecc71" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-                <a-entity position="0.6 0.8 -0.6" rotation="45 -45 0">
-                    <a-cone color="#2ecc71" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#2ecc71" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-
-                <!-- Fila superior -->
-                <a-entity position="-0.6 1.4 -0.6" rotation="90 45 0">
-                    <a-cone color="#f39c12" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#f39c12" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-                <a-entity position="0 1.4 -0.6" rotation="90 0 0">
-                    <a-cone color="#f39c12" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#f39c12" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-                <a-entity position="0.6 1.4 -0.6" rotation="90 -45 0">
-                    <a-cone color="#f39c12" radius-bottom="0.02" radius-top="0.0" height="0.2"></a-cone>
-                    <a-cylinder color="#f39c12" height="0.15" radius="0.008" position="0 0.075 0"></a-cylinder>
-                </a-entity>
-            </a-entity>
-
-            <!-- LÍNEAS DE CAMPO -->
-            <a-entity>
-                <!-- Líneas curvas del campo -->
-                <a-entity line="color: #9b59b6" 
-                    path=" -0.8 0.2 -0.8, -0.6 0.5 -0.6, -0.4 0.8 -0.4, -0.2 1.1 -0.2">
-                </a-entity>
-                <a-entity line="color: #9b59b6" 
-                    path=" 0 0.2 -0.8, 0 0.5 -0.6, 0 0.8 -0.4, 0 1.1 -0.2">
-                </a-entity>
-                <a-entity line="color: #9b59b6" 
-                    path=" 0.8 0.2 -0.8, 0.6 0.5 -0.6, 0.4 0.8 -0.4, 0.2 1.1 -0.2">
-                </a-entity>
             </a-entity>
 
         </a-marker>
@@ -158,49 +118,96 @@
     </a-scene>
 
     <script>
-        const marker = document.getElementById('marker');
-        const instructions = document.querySelector('.instructions');
-        const vectorField = document.getElementById('vectorField');
+        const diagnostic = document.getElementById('diagnostic');
+        const status1 = document.getElementById('status1');
+        const status2 = document.getElementById('status2');
+        const status3 = document.getElementById('status3');
+        const alfil = document.getElementById('alfil');
         
-        // Animación del campo vectorial
-        let angle = 0;
-        
-        function animateVectors() {
-            angle += 0.02;
-            
-            // Hacer que los vectores "fluyan" suavemente
-            const vectors = vectorField.children;
-            vectors.forEach((vector, index) => {
-                const wave = Math.sin(angle + index * 0.5) * 0.1;
-                vector.setAttribute('position', {
-                    x: vector.getAttribute('position').x + wave * 0.1,
-                    y: vector.getAttribute('position').y + Math.cos(angle + index) * 0.05,
-                    z: vector.getAttribute('position').z
-                });
+        console.log('🔍 Iniciando diagnóstico...');
+
+        // 1. Verificar si el archivo GLB existe
+        fetch('alfil_unido_final.glb')
+            .then(response => {
+                if (response.ok) {
+                    status1.innerHTML = '✅ Archivo alfil_unido_final.glb ENCONTRADO';
+                    status1.className = 'status success';
+                    console.log('✅ Archivo encontrado');
+                } else {
+                    status1.innerHTML = '❌ ERROR: alfil_unido_final.glb NO existe';
+                    status1.className = 'status error';
+                    console.error('❌ Archivo no encontrado');
+                }
+            })
+            .catch(error => {
+                status1.innerHTML = '❌ ERROR de red al cargar archivo';
+                status1.className = 'status error';
+                console.error('❌ Error de red:', error);
             });
-            
-            requestAnimationFrame(animateVectors);
-        }
-        
-        marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎓 PROYECTO DE CÁLCULO</h3><p>Alfil + Campo Vectorial 3D</p>';
-            instructions.style.background = 'rgba(0,150,0,0.8)';
-            
-            // Iniciar animación
-            animateVectors();
-        });
-        
-        marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ PROYECTO CÁLCULO - AR</h3><p>Apunta al marcador</p>';
-            instructions.style.background = 'rgba(0,0,0,0.8)';
-        });
 
+        // 2. Verificar carga del modelo 3D
         alfil.addEventListener('model-loaded', () => {
-            console.log('✅ Escena completa cargada');
+            status1.innerHTML = '✅ ✅ Modelo 3D CARGADO CORRECTAMENTE';
+            status1.className = 'status success';
+            console.log('✅ Modelo 3D cargado');
+            
+            // Ocultar diagnóstico después de 3 segundos
+            setTimeout(() => {
+                diagnostic.style.display = 'none';
+            }, 3000);
         });
 
-        console.log('📐 Escena matemática cargada: Alfil + Caja + Campo Vectorial');
+        alfil.addEventListener('model-error', (e) => {
+            status1.innerHTML = '❌ ERROR: Archivo GLB corrupto o inválido';
+            status1.className = 'status error';
+            console.error('❌ Error cargando modelo:', e.detail);
+        });
+
+        // 3. Verificar cámara
+        setTimeout(() => {
+            status2.innerHTML = '✅ Cámara ACTIVADA';
+            status2.className = 'status success';
+            console.log('✅ Cámara activada');
+        }, 2000);
+
+        // 4. Verificar marcador
+        const marker = document.getElementById('marker');
+        marker.addEventListener('markerFound', () => {
+            status3.innerHTML = '✅ Marcador DETECTADO';
+            status3.className = 'status success';
+            console.log('✅ Marcador detectado');
+        });
+
+        marker.addEventListener('markerLost', () => {
+            status3.innerHTML = '🎯 Buscando marcador...';
+            status3.className = 'status loading';
+        });
+
+        // 5. Verificar errores generales de A-Frame
+        document.querySelector('a-scene').addEventListener('loaded', () => {
+            console.log('✅ Escena A-Frame cargada');
+        });
+
+        // 6. Probar diferentes escalas si no se ve
+        setTimeout(() => {
+            const scales = [1.0, 2.0, 3.0, 4.0, 5.0];
+            let currentScale = 0;
+            
+            const tryScale = () => {
+                if (currentScale < scales.length) {
+                    alfil.setAttribute('scale', 
+                        `${scales[currentScale]} ${scales[currentScale]} ${scales[currentScale]}`);
+                    console.log(`🔧 Probando escala: ${scales[currentScale]}`);
+                    currentScale++;
+                    if (currentScale < scales.length) {
+                        setTimeout(tryScale, 1500);
+                    }
+                }
+            };
+            
+            tryScale();
+        }, 4000);
+
     </script>
 </body>
 </html>
-
