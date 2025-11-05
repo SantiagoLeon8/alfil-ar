@@ -29,30 +29,21 @@
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255,255,255,0.95);
-            padding: 12px;
-            border-radius: 12px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 10px;
             text-align: center;
             z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .btn {
             background: #4285f4;
             color: white;
             border: none;
-            padding: 12px 18px;
-            margin: 4px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            min-width: 100px;
-        }
-        .btn-left {
-            background: #34a853;
-        }
-        .btn-right {
-            background: #ea4335;
+            font-size: 14px;
         }
         .marker-image {
             position: fixed;
@@ -74,13 +65,14 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL + CAMPO VECTORIAL + CAJA AZUL</h3>
-        <p>Sin cubo amarillo - Todo visible</p>
+        <h3>♟️ CAMPO VECTORIAL COMPLETO</h3>
+        <p>F(x,y,z) = [-y, x, 0.5] - Rodea toda la figura</p>
     </div>
 
     <div class="controls">
-        <button class="btn btn-left" onclick="rotateScene('left')">↶ Girar Izquierda</button>
-        <button class="btn btn-right" onclick="rotateScene('right')">↷ Girar Derecha</button>
+        <button class="btn" onclick="rotateScene('left')">↶ Girar</button>
+        <button class="btn" onclick="rotateScene('right')">↷ Girar</button>
+        <button class="btn" onclick="toggleVectors()">🔁 Toggle Vectores</button>
     </div>
 
     <div class="marker-image">
@@ -92,98 +84,53 @@
         vr-mode-ui="enabled: false"
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 30;"
-        renderer="colorManagement: true;">
+        renderer="colorManagement: true; antialias: true;">
 
-        <!-- LUCES MUY FUERTES -->
-        <a-entity light="type: ambient; color: #FFFFFF; intensity: 4.0"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 5.0" position="0 20 10"></a-entity>
-        <a-entity light="type: point; color: #FFFFFF; intensity: 6.0" position="0 10 5"></a-entity>
+        <!-- LUCES -->
+        <a-entity light="type: ambient; color: #FFFFFF; intensity: 2.5"></a-entity>
+        <a-entity light="type: directional; color: #FFFFFF; intensity: 3.5" position="2 15 8"></a-entity>
+        <a-entity light="type: point; color: #FFFFFF; intensity: 5.0" position="0 8 5"></a-entity>
 
         <!-- Marcador Hiro -->
         <a-marker id="marker" type="pattern" preset="hiro"
             url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt">
             
-            <!-- CONTENEDOR PRINCIPAL QUE GIRA -->
-            <a-entity id="sceneContainer" rotation="0 0 0">
+            <!-- CONTENEDOR PRINCIPAL -->
+            <a-entity id="sceneContainer" rotation="0 0 0" scale="1.3 1.3 1.3">
                 
-                <!-- ========== CAJA AZUL TRANSPARENTE (SIN CUBO AMARILLO) ========== -->
+                <!-- CAJA VISIBLE -->
                 <a-box 
-                    position="0 0.8 -0.5"
-                    width="1.8"
-                    height="2.2"
-                    depth="1.8"
-                    color="#0066FF"
-                    opacity="0.1"
+                    id="caja"
+                    position="0 1.0 0"
+                    width="2.0"
+                    height="2.5"
+                    depth="2.0"
+                    color="#2980b9"
+                    opacity="0.15"
                     transparent="true"
                     wireframe="false">
                 </a-box>
 
-                <!-- MARCO DE LA CAJA AZUL (SOLO BORDES) -->
-                <a-box position="0 0.8 -0.5" width="1.8" height="0.02" depth="0.02" color="#0088FF"></a-box>
-                <a-box position="0 0.8 -0.5" width="0.02" height="2.2" depth="0.02" color="#0088FF"></a-box>
-                <a-box position="0 0.8 -0.5" width="0.02" height="0.02" depth="1.8" color="#0088FF"></a-box>
+                <!-- MARCO DE LA CAJA -->
+                <a-entity line="color: #3498db; opacity: 0.8" 
+                          path="-1.0 0 -1.0, -1.0 2.5 -1.0, 1.0 2.5 -1.0, 1.0 0 -1.0, -1.0 0 -1.0">
+                </a-entity>
+                <a-entity line="color: #3498db; opacity: 0.8" 
+                          path="-1.0 0 1.0, -1.0 2.5 1.0, 1.0 2.5 1.0, 1.0 0 1.0, -1.0 0 1.0">
+                </a-entity>
 
-                <!-- ========== ALFIL PRINCIPAL ========== -->
+                <!-- ALFIL -->
                 <a-entity 
+                    id="alfil"
                     gltf-model="alfil_unido_final.glb"
-                    scale="3.0 3.0 3.0"
-                    position="0 0.3 0"
-                    rotation="0 180 0">
+                    scale="2.8 2.8 2.8"
+                    position="0 0.6 0"
+                    rotation="0 0 0">
                 </a-entity>
 
-                <!-- ========== CAMPO VECTORIAL VISIBLE ========== -->
-                
-                <!-- VECTORES ROJOS (más grandes y visibles) -->
-                <a-entity position="-0.5 0.2 0.4">
-                    <a-cylinder color="#FF0000" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-                <a-entity position="0 0.2 0.4">
-                    <a-cylinder color="#FF0000" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-                <a-entity position="0.5 0.2 0.4">
-                    <a-cylinder color="#FF0000" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-
-                <!-- VECTORES VERDES -->
-                <a-entity position="-0.5 0.9 0.4" rotation="25 0 0">
-                    <a-cylinder color="#00FF00" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-                <a-entity position="0 0.9 0.4" rotation="25 0 0">
-                    <a-cylinder color="#00FF00" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-                <a-entity position="0.5 0.9 0.4" rotation="25 0 0">
-                    <a-cylinder color="#00FF00" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-
-                <!-- VECTORES AZULES -->
-                <a-entity position="-0.5 1.6 0.4" rotation="45 0 0">
-                    <a-cylinder color="#0000FF" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-                <a-entity position="0 1.6 0.4" rotation="45 0 0">
-                    <a-cylinder color="#0000FF" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-                <a-entity position="0.5 1.6 0.4" rotation="45 0 0">
-                    <a-cylinder color="#0000FF" height="0.25" radius="0.02" opacity="0.8"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.04" radius-top="0.0" height="0.12" position="0 0.185 0" opacity="0.8"></a-cone>
-                </a-entity>
-
-                <!-- LÍNEAS DE FLUJO VISIBLES -->
-                <a-entity line="color: #FF00FF; opacity: 0.7" 
-                    path="-0.7 0.2 0.4, -0.4 0.7 0.3, -0.1 1.2 0.2, 0.2 1.7 0.1">
-                </a-entity>
-                <a-entity line="color: #FF00FF; opacity: 0.7" 
-                    path="0 0.2 0.4, 0 0.7 0.3, 0 1.2 0.2, 0 1.7 0.1">
-                </a-entity>
-                <a-entity line="color: #FF00FF; opacity: 0.7" 
-                    path="0.7 0.2 0.4, 0.4 0.7 0.3, 0.1 1.2 0.2, -0.2 1.7 0.1">
+                <!-- CAMPO VECTORIAL COMPLETO (como en MATLAB) -->
+                <a-entity id="campoVectorialCompleto">
+                    <!-- Se generan dinámicamente en JavaScript -->
                 </a-entity>
 
             </a-entity>
@@ -197,54 +144,142 @@
         const marker = document.getElementById('marker');
         const instructions = document.querySelector('.instructions');
         const sceneContainer = document.getElementById('sceneContainer');
+        const campoVectorial = document.getElementById('campoVectorialCompleto');
         
         let currentRotation = 0;
-        
-        function rotateScene(direction) {
-            if (direction === 'left') {
-                currentRotation += 45;
-            } else if (direction === 'right') {
-                currentRotation -= 45;
+        let vectorsVisible = true;
+
+        // FUNCIÓN PARA CREAR CAMPO VECTORIAL F(x,y,z) = [-y, x, 0.5]
+        function crearCampoVectorial() {
+            campoVectorial.innerHTML = ''; // Limpiar primero
+            
+            // Parámetros del campo (como en MATLAB)
+            const minX = -4, maxX = 4, stepX = 1.2;
+            const minY = -4, maxY = 4, stepY = 1.2; 
+            const minZ = 0.2, maxZ = 4.0, stepZ = 0.8;
+            
+            let vectorCount = 0;
+            
+            // Crear vectores en una malla 3D que rodee la figura
+            for (let x = minX; x <= maxX; x += stepX) {
+                for (let y = minY; y <= maxY; y += stepY) {
+                    for (let z = minZ; z <= maxZ; z += stepZ) {
+                        
+                        // Campo vectorial: F(x,y,z) = [-y, x, 0.5]
+                        const U = -y * 0.3;  // Componente X
+                        const V = x * 0.3;   // Componente Y  
+                        const W = 0.15;      // Componente Z (flujo hacia arriba)
+                        
+                        // Calcular dirección y magnitud
+                        const magnitude = Math.sqrt(U*U + V*V + W*W);
+                        const scale = 0.8;
+                        
+                        // Calcular rotación para apuntar en la dirección correcta
+                        const rotationX = -Math.atan2(W, Math.sqrt(U*U + V*V)) * (180/Math.PI);
+                        const rotationY = Math.atan2(V, U) * (180/Math.PI);
+                        
+                        // Crear vector (flecha)
+                        const vector = document.createElement('a-entity');
+                        vector.setAttribute('position', `${x} ${z} ${y}`);
+                        vector.setAttribute('rotation', `${rotationX} ${rotationY} 0`);
+                        
+                        // Cilindro (cuerpo de la flecha)
+                        const cylinder = document.createElement('a-cylinder');
+                        cylinder.setAttribute('height', magnitude * scale);
+                        cylinder.setAttribute('radius', 0.015);
+                        cylinder.setAttribute('color', getVectorColor(z));
+                        cylinder.setAttribute('position', `0 ${magnitude * scale / 2} 0`);
+                        
+                        // Cono (punta de la flecha)
+                        const cone = document.createElement('a-cone');
+                        cone.setAttribute('radius-bottom', 0.035);
+                        cone.setAttribute('radius-top', 0.0);
+                        cone.setAttribute('height', 0.12);
+                        cone.setAttribute('color', getVectorColor(z));
+                        cone.setAttribute('position', `0 ${magnitude * scale + 0.06} 0`);
+                        
+                        vector.appendChild(cylinder);
+                        vector.appendChild(cone);
+                        campoVectorial.appendChild(vector);
+                        
+                        vectorCount++;
+                    }
+                }
             }
             
+            console.log(`✅ Campo vectorial creado: ${vectorCount} vectores`);
+            console.log('🎯 Función: F(x,y,z) = [-y, x, 0.5]');
+        }
+
+        // Función para color basado en altura (como en MATLAB)
+        function getVectorColor(z) {
+            if (z < 1.0) return '#e74c3c'; // Rojo - abajo
+            if (z < 2.0) return '#f39c12'; // Naranja - medio
+            if (z < 3.0) return '#2ecc71'; // Verde - medio alto
+            return '#3498db';               // Azul - arriba
+        }
+
+        // Animación del campo vectorial (flujo continuo)
+        function animarCampoVectorial() {
+            const vectors = campoVectorial.children;
+            const time = Date.now() * 0.001;
+            
+            vectors.forEach((vector, index) => {
+                if (!vectorsVisible) return;
+                
+                // Movimiento suave de los vectores (flujo animado)
+                const wave = Math.sin(time + index * 0.1) * 0.05;
+                const currentPos = vector.getAttribute('position');
+                
+                // Pequeña oscilación para simular flujo
+                vector.setAttribute('position', {
+                    x: currentPos.x,
+                    y: currentPos.y + wave,
+                    z: currentPos.z
+                });
+            });
+            
+            requestAnimationFrame(animarCampoVectorial);
+        }
+
+        // Controles de rotación
+        function rotateScene(direction) {
+            currentRotation += (direction === 'left') ? 45 : -45;
             sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
         }
-        
-        let isRotating = false;
-        let lastTouchX = 0;
-        
-        document.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                isRotating = true;
-                lastTouchX = e.touches[0].clientX;
-            }
-        });
-        
-        document.addEventListener('touchmove', (e) => {
-            if (isRotating && e.touches.length === 1) {
-                const deltaX = e.touches[0].clientX - lastTouchX;
-                currentRotation += deltaX * 0.5;
-                sceneContainer.setAttribute('rotation', `0 ${currentRotation} 0`);
-                lastTouchX = e.touches[0].clientX;
-            }
-        });
-        
-        document.addEventListener('touchend', () => {
-            isRotating = false;
-        });
-        
+
+        // Toggle visibilidad de vectores
+        function toggleVectors() {
+            vectorsVisible = !vectorsVisible;
+            campoVectorial.setAttribute('visible', vectorsVisible);
+            instructions.innerHTML = vectorsVisible ? 
+                '<h3>🎯 VECTORES ACTIVOS</h3><p>F(x,y,z) = [-y, x, 0.5]</p>' :
+                '<h3>🎯 VECTORES OCULTOS</h3><p>Presiona para mostrar</p>';
+        }
+
+        // Cuando se detecta el marcador
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎯 ¡TODO VISIBLE!</h3><p>Alfil + Vectores + Caja azul</p>';
+            instructions.innerHTML = '<h3>🎓 CAMPO VECTORIAL MATLAB</h3><p>F(x,y,z) = [-y, x, 0.5]</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
+            
+            // Crear y animar campo vectorial
+            crearCampoVectorial();
+            animarCampoVectorial();
         });
-        
+
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL + CAMPO VECTORIAL + CAJA AZUL</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ CAMPO VECTORIAL - AR</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🚀 Código limpio - Sin cubo amarillo');
+        // Información en consola
+        console.log('🧮 Campo Vectorial MATLAB implementado:');
+        console.log('📐 F(x,y,z) = [-y, x, 0.5]');
+        console.log('🎯 Rotación XY + Flujo Z constante');
+        console.log('📦 Cubre volumen: x[-4,4], y[-4,4], z[0.2,4.0]');
+
     </script>
 </body>
 </html>
+
 
