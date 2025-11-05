@@ -74,8 +74,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL + CAMPO VECTORIAL</h3>
-        <p>Alfil claro • Vectores transparentes</p>
+        <h3>♟️ ALFIL + CAJA AZUL + CAMPO VECTORIAL</h3>
+        <p>Todo transparente y visible</p>
     </div>
 
     <div class="controls">
@@ -106,15 +106,32 @@
             <!-- CONTENEDOR PRINCIPAL QUE GIRA -->
             <a-entity id="sceneContainer" rotation="0 0 0">
                 
-                <!-- ========== ALFIL PRIMERO (BIEN VISIBLE) ========== -->
+                <!-- ========== CAJA AZUL TRANSPARENTE (AL FONDO) ========== -->
+                <a-box 
+                    position="0 0.8 -0.3"  <!-- DETRÁS de todo -->
+                    width="1.5"
+                    height="2.0"
+                    depth="1.5"
+                    color="#0066FF"  <!-- AZUL BRILLANTE -->
+                    opacity="0.15"   <!-- MUY TRANSPARENTE -->
+                    transparent="true"
+                    wireframe="false">
+                </a-box>
+
+                <!-- MARCO DE LA CAJA AZUL -->
+                <a-box position="0 0.8 -0.3" width="1.5" height="0.05" depth="0.05" color="#0088FF" opacity="0.6"></a-box>
+                <a-box position="0 0.8 -0.3" width="0.05" height="2.0" depth="0.05" color="#0088FF" opacity="0.6"></a-box>
+                <a-box position="0 0.8 -0.3" width="0.05" height="0.05" depth="1.5" color="#0088FF" opacity="0.6"></a-box>
+
+                <!-- ========== ALFIL PRINCIPAL ========== -->
                 <a-entity 
                     gltf-model="alfil_unido_final.glb"
-                    scale="3.5 3.5 3.5"  <!-- MÁS GRANDE -->
-                    position="0 0.3 0"    <!-- EN EL CENTRO -->
-                    rotation="0 180 0">   <!-- MIRANDO AL USUARIO -->
+                    scale="3.5 3.5 3.5"
+                    position="0 0.3 0"
+                    rotation="0 180 0">
                 </a-entity>
 
-                <!-- ========== CAMPO VECTORIAL TRANSPARENTE Y PEQUEÑO ========== -->
+                <!-- ========== CAMPO VECTORIAL TRANSPARENTE ========== -->
                 
                 <!-- VECTORES ROJOS (transparentes) -->
                 <a-entity position="-0.3 0.2 0.3" rotation="0 0 0">
@@ -220,16 +237,16 @@
         });
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎯 ALFIL CLARO • VECTORES TRANSPARENTES</h3><p>El alfil se ve perfectamente</p>';
+            instructions.innerHTML = '<h3>🎯 ALFIL + CAJA AZUL + VECTORES</h3><p>Todo transparente y visible</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL + CAMPO VECTORIAL</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL + CAJA AZUL + CAMPO VECTORIAL</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎮 Alfil principal - Vectores transparentes');
+        console.log('🎮 Alfil + Caja azul + Campo vectorial transparente');
     </script>
 </body>
 </html>
