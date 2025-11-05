@@ -74,8 +74,8 @@
 </head>
 <body>
     <div class="instructions">
-        <h3>♟️ ALFIL + CAJA AZUL + CAMPO VECTORIAL</h3>
-        <p>Caja azul transparente • Líneas amarillas</p>
+        <h3>♟️ ALFIL + CAJA AMARILLA + CAMPO VECTORIAL</h3>
+        <p>Todo transparente y visible</p>
     </div>
 
     <div class="controls">
@@ -106,19 +106,22 @@
             <!-- CONTENEDOR PRINCIPAL QUE GIRA -->
             <a-entity id="sceneContainer" rotation="0 0 0">
                 
-                <!-- ========== CAJA AZUL TRANSPARENTE (SIN CUBO BLANCO) ========== -->
-                <a-entity>
-                    <!-- Solo el marco azul - sin cubo sólido -->
-                    <a-box position="0 0.8 -0.2" width="1.6" height="0.05" depth="0.05" color="#0088FF" opacity="0.8"></a-box>
-                    <a-box position="0 0.8 -0.2" width="0.05" height="2.0" depth="0.05" color="#0088FF" opacity="0.8"></a-box>
-                    <a-box position="0 0.8 -0.2" width="0.05" height="0.05" depth="1.6" color="#0088FF" opacity="0.8"></a-box>
-                    
-                    <!-- Esquinas de la caja -->
-                    <a-sphere position="-0.8 0 -0.8" radius="0.03" color="#0088FF" opacity="0.8"></a-sphere>
-                    <a-sphere position="0.8 0 -0.8" radius="0.03" color="#0088FF" opacity="0.8"></a-sphere>
-                    <a-sphere position="-0.8 2.0 -0.8" radius="0.03" color="#0088FF" opacity="0.8"></a-sphere>
-                    <a-sphere position="0.8 2.0 -0.8" radius="0.03" color="#0088FF" opacity="0.8"></a-sphere>
-                </a-entity>
+                <!-- ========== CAJA AMARILLA TRANSPARENTE (AL FONDO) ========== -->
+                <a-box 
+                    position="0 0.8 -0.3"  <!-- DETRÁS de todo -->
+                    width="1.5"
+                    height="2.0"
+                    depth="1.5"
+                    color="#FFD700"  <!-- AMARILLO ORO -->
+                    opacity="0.12"   <!-- MUY TRANSPARENTE -->
+                    transparent="true"
+                    wireframe="false">
+                </a-box>
+
+                <!-- MARCO DE LA CAJA AMARILLA -->
+                <a-box position="0 0.8 -0.3" width="1.5" height="0.05" depth="0.05" color="#FFAA00" opacity="0.5"></a-box>
+                <a-box position="0 0.8 -0.3" width="0.05" height="2.0" depth="0.05" color="#FFAA00" opacity="0.5"></a-box>
+                <a-box position="0 0.8 -0.3" width="0.05" height="0.05" depth="1.5" color="#FFAA00" opacity="0.5"></a-box>
 
                 <!-- ========== ALFIL PRINCIPAL ========== -->
                 <a-entity 
@@ -128,70 +131,59 @@
                     rotation="0 180 0">
                 </a-entity>
 
-                <!-- ========== CAMPO VECTORIAL CON LÍNEAS AMARILLAS ========== -->
+                <!-- ========== CAMPO VECTORIAL TRANSPARENTE ========== -->
                 
                 <!-- VECTORES ROJOS (transparentes) -->
                 <a-entity position="-0.3 0.2 0.3" rotation="0 0 0">
-                    <a-cylinder color="#FF0000" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#FF0000" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#FF0000" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
                 <a-entity position="0 0.2 0.3" rotation="0 0 0">
-                    <a-cylinder color="#FF0000" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#FF0000" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#FF0000" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
                 <a-entity position="0.3 0.2 0.3" rotation="0 0 0">
-                    <a-cylinder color="#FF0000" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#FF0000" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#FF0000" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#FF0000" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
 
                 <!-- VECTORES VERDES (transparentes) -->
                 <a-entity position="-0.3 0.8 0.3" rotation="20 0 0">
-                    <a-cylinder color="#00FF00" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#00FF00" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#00FF00" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
                 <a-entity position="0 0.8 0.3" rotation="20 0 0">
-                    <a-cylinder color="#00FF00" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#00FF00" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#00FF00" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
                 <a-entity position="0.3 0.8 0.3" rotation="20 0 0">
-                    <a-cylinder color="#00FF00" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#00FF00" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#00FF00" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#00FF00" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
 
                 <!-- VECTORES AZULES (transparentes) -->
                 <a-entity position="-0.3 1.4 0.3" rotation="40 0 0">
-                    <a-cylinder color="#0000FF" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#0000FF" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#0000FF" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
                 <a-entity position="0 1.4 0.3" rotation="40 0 0">
-                    <a-cylinder color="#0000FF" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#0000FF" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#0000FF" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
                 <a-entity position="0.3 1.4 0.3" rotation="40 0 0">
-                    <a-cylinder color="#0000FF" height="0.15" radius="0.015" opacity="0.5"></a-cylinder>
-                    <a-cone color="#0000FF" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.5"></a-cone>
+                    <a-cylinder color="#0000FF" height="0.15" radius="0.015" opacity="0.4"></a-cylinder>
+                    <a-cone color="#0000FF" radius-bottom="0.03" radius-top="0.0" height="0.08" position="0 0.115 0" opacity="0.4"></a-cone>
                 </a-entity>
 
-                <!-- LÍNEAS DE FLUJO AMARILLAS TRANSPARENTES -->
-                <a-entity line="color: #FFFF00; opacity: 0.6" 
-                    path="-0.5 0.2 0.3, -0.3 0.6 0.2, -0.1 1.0 0.1, 0.1 1.4 0">
+                <!-- LÍNEAS DE FLUJO (muy transparentes) -->
+                <a-entity line="color: #FFFF00; opacity: 0.3" 
+                    path="-0.4 0.2 0.3, -0.2 0.6 0.2, 0 1.0 0.1, 0.2 1.4 0">
                 </a-entity>
-                <a-entity line="color: #FFFF00; opacity: 0.6" 
+                <a-entity line="color: #FFFF00; opacity: 0.3" 
                     path="0 0.2 0.3, 0 0.6 0.2, 0 1.0 0.1, 0 1.4 0">
                 </a-entity>
-                <a-entity line="color: #FFFF00; opacity: 0.6" 
-                    path="0.5 0.2 0.3, 0.3 0.6 0.2, 0.1 1.0 0.1, -0.1 1.4 0">
-                </a-entity>
-
-                <!-- LÍNEAS HORIZONTALES AMARILLAS -->
-                <a-entity line="color: #FFFF00; opacity: 0.4" 
-                    path="-0.5 0.5 0.3, 0.5 0.5 0.3">
-                </a-entity>
-                <a-entity line="color: #FFFF00; opacity: 0.4" 
-                    path="-0.5 1.0 0.3, 0.5 1.0 0.3">
-                </a-entity>
-                <a-entity line="color: #FFFF00; opacity: 0.4" 
-                    path="-0.5 1.5 0.3, 0.5 1.5 0.3">
+                <a-entity line="color: #FFFF00; opacity: 0.3" 
+                    path="0.4 0.2 0.3, 0.2 0.6 0.2, 0 1.0 0.1, -0.2 1.4 0">
                 </a-entity>
 
             </a-entity>
@@ -245,16 +237,16 @@
         });
         
         marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎯 ALFIL + MARCO AZUL + LÍNEAS AMARILLAS</h3><p>Sin cubo blanco - Todo transparente</p>';
+            instructions.innerHTML = '<h3>🎯 ALFIL + CAJA AMARILLA + VECTORES</h3><p>Todo transparente y visible</p>';
             instructions.style.background = 'rgba(0,150,0,0.8)';
         });
         
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ ALFIL + CAJA AZUL + CAMPO VECTORIAL</h3><p>Apunta al marcador</p>';
+            instructions.innerHTML = '<h3>♟️ ALFIL + CAJA AMARILLA + CAMPO VECTORIAL</h3><p>Apunta al marcador</p>';
             instructions.style.background = 'rgba(0,0,0,0.8)';
         });
 
-        console.log('🎮 Marco azul + Líneas amarillas transparentes');
+        console.log('🎮 Alfil + Caja amarilla + Campo vectorial transparente');
     </script>
 </body>
 </html>
