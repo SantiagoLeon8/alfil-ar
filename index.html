@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title Proyecto final - Tercer Corte Figura Algil Realidad Aumentada> </title>
-    <p Proyecto Final > </p>
-    <p Creador : Santiago Leon Santiago></p>
+    <title Proyecto Final - Alfil en Realidad Aumentada> </title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
@@ -68,10 +66,13 @@
 </head>
 <body>
     <div class="instructions">
-        <COMPLETO>♟️ CAMPO VECTORIAL COMPLETO</h3>
-        <p>F(x,y,z) = [-y, x, 0.5] - Rodea toda la figura</p>
+    <h3>🎓 PROYECTO FINAL - CÁLCULO MULTIVARIADO</h3>
+    <p>Alfil en Realidad Aumentada</p>
+    <p>Campo Vectorial F(x,y,z) = [-y, x, 0.5]</p>
+    <p>Santiago León Hernández</p>
+    <p>Cálculo Multivariado</p>
     </div>
-
+    
     <div class="controls">
         <button class="btn" onclick="rotateScene('left')">↶ Girar</button>
         <button class="btn" onclick="rotateScene('right')">↷ Girar</button>
@@ -260,20 +261,28 @@
                 '<h3>🎯 VECTORES OCULTOS</h3><p>Presiona para mostrar</p>';
         }
 
-        // Cuando se detecta el marcador
-        marker.addEventListener('markerFound', () => {
-            instructions.innerHTML = '<h3>🎓 CAMPO VECTORIAL MATLAB</h3><p>F(x,y,z) = [-y, x, 0.5]</p>';
-            instructions.style.background = 'rgba(0,150,0,0.8)';
-            
-            // Crear y animar campo vectorial
-            crearCampoVectorial();
-            animarCampoVectorial();
-        });
+    marker.addEventListener('markerFound', () => {
+        instructions.innerHTML = `
+        <h3>🎓 PROYECTO FINAL - CÁLCULO MULTIVARIADO</h3>
+        <p>Modelo 3D del Alfil</p>
+        <p>Campo Vectorial F(x,y,z) = [-y, x, 0.5]</p>
+        <p>Teorema de Green y Visualización 3D</p>
+    `;
+
+    instructions.style.background = 'rgba(0,120,0,0.90)';
+
+    crearCampoVectorial();
+    animarCampoVectorial();
+});
 
         marker.addEventListener('markerLost', () => {
-            instructions.innerHTML = '<h3>♟️ CAMPO VECTORIAL - AR</h3><p>Apunta al marcador</p>';
-            instructions.style.background = 'rgba(0,0,0,0.8)';
-        });
+    instructions.innerHTML = `
+        <h3>🎓 PROYECTO FINAL - CÁLCULO MULTIVARIADO</h3>
+        <p>Escanea el marcador para visualizar el modelo 3D</p>
+    `;
+
+    instructions.style.background = 'rgba(0,0,0,0.85)';
+});
 
         // Información en consola
         console.log('🧮 Campo Vectorial MATLAB implementado:');
